@@ -3,7 +3,11 @@
     <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
     <PropertyGroup>
-        <TargetFramework>net46</TargetFramework>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Description>Provides targets for projects that do not compile an assembly.</Description>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PackageTags>MSBuild MSBuildSdk notargets notarget</PackageTags>
     </PropertyGroup>
 
     <!-- Implicit bottom import -->
