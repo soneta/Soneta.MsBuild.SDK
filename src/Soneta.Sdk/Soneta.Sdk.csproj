@@ -1,15 +1,22 @@
-<Project>
-    <!-- Implicit top import -->
-    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-    <TargetFramework>netstandard1.1</TargetFramework>
+  <PropertyGroup>
+    <TargetFramework>netstandard1.3</TargetFramework>
+    <PackageId>Soneta.Sdk</PackageId>
+    <Authors>Soneta</Authors>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Description>Provides targets for projects that do not compile an assembly.</Description>
+    <Description>MSBuild Sdk dla dodatków do produktów Soneta</Description>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <PackageTags>MSBuild MSBuildSdk notargets notarget</PackageTags>
-    </PropertyGroup>
+    <PackageTags>Soneta Sdk MSBuild</PackageTags>
+    <PackageType>MSBuildSdk</PackageType>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
 
-    <!-- Implicit bottom import -->
-    <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <ItemGroup>
+    <Content Include="Sdk\**">
+      <Pack>true</Pack>
+      <PackagePath>Sdk</PackagePath>
+    </Content>
+  </ItemGroup>
+
 </Project>
