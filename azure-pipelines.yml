@@ -1,0 +1,28 @@
+resources:
+- repo: self
+queue:
+  name: Default
+variables:
+  configuration: release
+  platform: any cpu
+  restoreBuildProjects: '**/*.csproj'
+steps:
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(restoreBuildProjects)'
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    projects: '$(restoreBuildProjects)'
+    arguments: '--configuration $(configuration)'
+- task: DotNetCoreCLI@2
+  displayName: Pack
+  inputs:
+    command: pack
+    nobuild: true
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
