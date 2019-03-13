@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.4;net40;net46</TargetFrameworks>
     <PackageId>Soneta.Sdk</PackageId>
     <Authors>Soneta</Authors>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>

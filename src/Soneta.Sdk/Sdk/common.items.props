@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Update="**\*.business.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Remove="**\*.config.xml" />
+    <EmbeddedResource Include="**\*.config.xml">
+      <LastGenOutput>%(Filename).cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Update="**\*.business.cs;**\*.config.cs">
+      <DependentUpon>%(Filename).xml</DependentUpon>
+      <SubType>Code</SubType>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Remove="**\*.convert.sql" />
+    <EmbeddedResource Include="**\*.convert.sql" />
+    <None Remove="**\*.dbinit.xml" />
+    <EmbeddedResource Include="**\*.dbinit.xml" />
+
+    <None Remove="**\*.*form.xml" />
+    <EmbeddedResource Include="**\*.*form.xml" />
+    <None Remove="**\*.*form.exp.xml" />
+    <EmbeddedResource Include="**\*.*form.exp.xml" />
+    <None Remove="**\*.*form.rt.xml" />
+    <EmbeddedResource Include="**\*.*form.rt.xml" />
+    <None Remove="**\*.*form.mobile.xml" />
+    <EmbeddedResource Include="**\*.*form.mobile.xml" />
+    <None Remove="**\Repx\*.jpg" />
+    <EmbeddedResource Include="**\Repx\*.jpg" />
+    <None Remove="**\Repx\*.gif" />
+    <EmbeddedResource Include="**\Repx\*.gif" />
+    <None Remove="**\Repx\*.png" />
+    <EmbeddedResource Include="**\Repx\*.png" />
+    <None Remove="**\Repx\*.bmp" />
+    <EmbeddedResource Include="**\Repx\*.bmp" />
+
+    <Compile Update="**\*.repx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="**\*.repx.cs" />
+
+    <None Remove="**\*.role.xml" />
+    <EmbeddedResource Include="**\*.role.xml" />
+
+    <None Remove="**\*.publish.xml" />
+    <EmbeddedResource Include="**\*.publish.xml" />
+
+    <None Update="**\.editorconfig" Visible="false" />
+
+    <None Remove="Properties\licenses.licx*" />
+    <EmbeddedResource Include="Properties\licenses.licx*" />
+  </ItemGroup>
+</Project>
