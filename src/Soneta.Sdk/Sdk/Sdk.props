@@ -11,10 +11,8 @@
 
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <IsTestProject Condition="'$(IsTestProject)' == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
+    <UsingSonetaSdk>true</UsingSonetaSdk>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsTestProject)' == 'true' ">
