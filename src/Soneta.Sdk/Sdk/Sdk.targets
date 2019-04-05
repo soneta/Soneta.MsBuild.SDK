@@ -4,4 +4,36 @@
 
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition=" '$(CommonTargetsPath)' == '' " />
 
+  <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <SonetaSchemaReference Include="$([System.IO.Path]::GetDirectoryName( '%(Reference.HintPath)' ))\..\..\schema\*.business.xml"
+        Condition="$( [System.String]::new( '%( Reference.HintPath )' ).Trim().Length ) &gt; 0" />
+    </ItemGroup>
+    <Message Text="SonetaSchemaReference: %(SonetaSchemaReference.Identity)" />
+  </Target>
+
+  <Target Name="ResolveSonetaGeneratorExe" DependsOnTargets="ResolveAssemblyReferences">
+    <ItemGroup>
+      <SonetaGeneratorExe Include="%(Reference.HintPath)"
+        Condition="$( [System.String]::new( '%( Reference.HintPath )' ).Contains( 'Soneta.Generator.exe' ) )" />
+    </ItemGroup>
+    <Message Text="SonetaGeneratorExe: @(SonetaGeneratorExe)" />
+  </Target>
+
+  <Target Name="SonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="ResolveSonetaSchemaReferences;ResolveSonetaGeneratorExe"
+         Condition=" ( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' ) AND $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0 ">
+    <ItemGroup>
+      <BusinessXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml'))"/>
+      <WorkingXmls Include="@(BusinessXmls)"/>
+      <WorkingXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml'))"/>
+    </ItemGroup>
+
+    <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
+
+    <Exec Condition="'@(SonetaSchemaReference->Count())' &lt; 1 AND '@(WorkingXmls->Count())' &gt; 0"
+      Command="@(SonetaGeneratorExe) %(WorkingXmls.FullPath) FILE" />
+    <Exec Condition="'@(SchemaReference->Count())' &gt; 0 AND '@(WorkingXmls->Count())' &gt; 0"
+      Command="@(SonetaGeneratorExe) -s @(SonetaSchemaReference,' ') @(BusinessXmls,' ') %(WorkingXmls.FullPath)" />
+  </Target>
+
 </Project>
