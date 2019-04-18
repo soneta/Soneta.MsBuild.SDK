@@ -2,11 +2,12 @@
 
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Update="**\*.business.xml">
+    <None Remove="**\*.business.xml" />
+    <None Include="**\*.business.xml" Pack="true" PackagePath="schema\%(Filename)%(Extension)" >
       <SubType>Designer</SubType>
     </None>
     <None Remove="**\*.config.xml" />
-    <EmbeddedResource Include="**\*.config.xml">
+    <EmbeddedResource Include="**\*.config.xml" Pack="false" >
       <LastGenOutput>%(Filename).cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
