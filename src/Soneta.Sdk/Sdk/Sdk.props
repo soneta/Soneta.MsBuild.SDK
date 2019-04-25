@@ -1,25 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="'$(UsingMicrosoftNETSdk)' != 'true' "/>
+  <PropertyGroup>
+    <IsAddonProject Condition="'$(UsingMicrosoftNETSdk)' != 'true'">true</IsAddonProject>
+  </PropertyGroup>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="'$(IsAddonProject)' == 'true'"/>
   <Import Project="common.items.props" />
-
-  <ItemGroup>
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
-  </ItemGroup>
-
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <IsTestProject Condition="'$(IsTestProject)' == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
+    <EnableDefaultSonetaPackageReferences Condition="'$(EnableDefaultSonetaPackageReferences)' == ''">true</EnableDefaultSonetaPackageReferences>
+    <ValueTuplePackageVersion>4.4.0</ValueTuplePackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(IsTestProject)' == 'true' ">
-    <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-    <PackageReference Include="NSubstitute" Version="1.10.0" />
-    <PackageReference Include="FluentAssertions" Version="4.19.2" />
-  </ItemGroup>
-
+  <Choose>
+    <When Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true'">
+      <Choose>
+        <When Condition="'$(IsAddonProject)' == 'true'">
+          <Choose>
+            <When Condition="'$(IsTestProject)' == 'true'">
+              <ItemGroup>
+                <PackageReference Include="Soneta.Products.Test" Version="$(SonetaPackageVersion)" />
+              </ItemGroup>
+            </When>
+            <Otherwise>
+              <ItemGroup>
+                <PackageReference Include="Soneta.Products.Modules" Version="$(SonetaPackageVersion)" IncludeAssets="compile" />
+                <PackageReference Include="System.ValueTuple" Version="$(ValueTuplePackageVersion)" IncludeAssets="compile" />
+              </ItemGroup>
+            </Otherwise>
+          </Choose>
+        </When>
+        <Otherwise>
+          <Choose>
+            <When Condition="'$(IsTestProject)' == 'true'">
+              <ItemGroup>
+                <PackageReference Include="NUnit" Version="3.11.0" />
+                <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+                <PackageReference Include="NSubstitute" Version="1.10.0" />
+                <PackageReference Include="FluentAssertions" Version="4.19.2" />
+              </ItemGroup>
+            </When>
+          </Choose>
+          <ItemGroup>
+            <PackageReference Include="System.ValueTuple" Version="$(ValueTuplePackageVersion)" />
+          </ItemGroup>
+        </Otherwise>
+      </Choose>
+    </When>
+  </Choose>
 </Project>
