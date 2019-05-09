@@ -1,20 +1,29 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Sdk stworzone przez firmę Soneta pozwalające automatycznie skonfigurować oraz uzupełnić projekty dodatków o niezbędne elementy potrzebne do współpracy z oprogramowaniem enova.
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+W celu zaimportowania Soneta.Sdk w projekcie importującym w pliku nazwaprojektu.csproj w linii dotyczącej projektu ustawiamy: 
+```xml
+   <Project Sdk="Soneta.Sdk/numerWersji">  
+```
+Po zapisie zmian zostanie wykonana automatyczna konfiguracja projektu.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+W przypadku gdy w solucji znajduję się wiele projektów, by uniknąć konieczności zmian w każdym projekcie numeru wersji, istnieje możliwość stworzenia pliku nadrzędnego global.json (poza projektami) o zawartości: 
+```json
+   { 
+     "msbuild-sdks": { 
+        "Soneta.Sdk": "numerWersji" 
+      }
+   } 
+```
+ Dzięki czemu w plikach .csproj wymagany będzie tylko wpis bez konieczności umieszczania numeru wersji.
 
 # Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+1. Po poprawnym zbudowaniu Sdk ustawiamy się w konsoli na ścieżce \bin\Release
+2. Wykonujemy push do naszego lokalnego folderu z paczkami: 
+```powershell
+dotnet nuget push nazwaPaczki.nupkg -s C:\Users....nuget\packages
+``` 
+3. Dzięki powyższym czynnościom nasze SDK będzie widoczne dla naszych nowo utworzonych projektów. 
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
