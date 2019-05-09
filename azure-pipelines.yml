@@ -22,6 +22,14 @@ steps:
   inputs:
     command: pack
     nobuild: true
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    feedsToUse: 'select'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'testfeed'
+    versioningScheme: 'off'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
   inputs:
