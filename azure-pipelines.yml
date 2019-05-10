@@ -25,10 +25,10 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'push'
-    feedsToUse: 'select'
+    feedsToUse: 'config'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'testfeed'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'sleet'
     versioningScheme: 'off'
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
