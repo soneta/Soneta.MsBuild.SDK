@@ -1,22 +1,13 @@
 resources:
 - repo: self
-queue:
-  name: Default
-variables:
-  configuration: release
-  platform: any cpu
-  restoreBuildProjects: '**/*.csproj'
+pool:
+  vmImage: 'windows-2019'
 steps:
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: restore
-    projects: '$(restoreBuildProjects)'
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
-    projects: '$(restoreBuildProjects)'
-    arguments: '--configuration $(configuration)'
+    projects: '**/*.csproj'
+    arguments: '--configuration release'
 - task: DotNetCoreCLI@2
   displayName: Pack
   inputs:
