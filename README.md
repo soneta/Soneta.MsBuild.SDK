@@ -1,3 +1,6 @@
+## Build 
+[![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
+
 # Introduction 
 Sdk stworzone przez firmę Soneta pozwalające automatycznie skonfigurować oraz uzupełnić projekty dodatków o niezbędne elementy potrzebne do współpracy z oprogramowaniem enova.
 
