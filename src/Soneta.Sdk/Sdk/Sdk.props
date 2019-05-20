@@ -8,12 +8,19 @@
   <Import Project="common.items.props" />
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
-    <IsTestProject Condition="'$(IsTestProject)' == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
-    <EnableDefaultSonetaPackageReferences Condition="'$(EnableDefaultSonetaPackageReferences)' == ''">true</EnableDefaultSonetaPackageReferences>
+    <IsTestProject Condition="$(IsTestProject) == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
+    <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
+    <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
     <SonetaValueTuplePackageVersion>4.4.0</SonetaValueTuplePackageVersion>
     <SonetaNUnitPackageVersion>3.11.0</SonetaNUnitPackageVersion>
     <SonetaNUnitTestAdapterPackageVersion>3.13.0</SonetaNUnitTestAdapterPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
+    <SonetaDefaultInstallDirectory>$(MSBuildProgramFiles32)\Soneta</SonetaDefaultInstallDirectory>
+    <SonetaCurrentVersionIndex Condition="Exists($(SonetaDefaultInstallDirectory))">$([MSBuild]::Add($([System.IO.Directory]::GetDirectories($(SonetaDefaultInstallDirectory)).Length), -1))</SonetaCurrentVersionIndex>
+    <SonetaCurrentVersionDirectory Condition="$(SonetaCurrentVersionIndex) != '' AND $(SonetaCurrentVersionIndex) &gt; -1">$([System.IO.Directory]::GetDirectories($(SonetaDefaultInstallDirectory))[$(SonetaCurrentVersionIndex)])</SonetaCurrentVersionDirectory>
+    <SonetaAddonStartProgram>$(SonetaCurrentVersionDirectory)\SonetaExplorer.exe</SonetaAddonStartProgram>
   </PropertyGroup>
   <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' == 'true'">
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Soneta.Products.Test" Version="$(SonetaPackageVersion)" />
