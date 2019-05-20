@@ -2,6 +2,14 @@
 
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup Condition="$(Configuration) == 'Debug' AND '$(IsTestProject)' != 'true' AND $(StartProgram) == '' AND Exists($(SonetaAddonStartProgram))">
+    <StartAction>Program</StartAction>
+    <StartProgram>$(SonetaAddonStartProgram)</StartProgram>
+    <AggregatePath Condition="'$(AggregateOutput)' == 'true'">..\</AggregatePath>
+    <OutputPath Condition="$(OutputPath) == ''">$(AggregatePath)bin\$(Configuration)</OutputPath>
+    <StartArguments>/extpath=$(MSBuildProjectDirectory)\$(OutputPath)\$(SonetaTargetFramework)</StartArguments>
+  </PropertyGroup>
+  
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition=" '$(CommonTargetsPath)' == '' " />
 
   <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolveAssemblyReferences">
