@@ -1,10 +1,13 @@
-## Build 
-[![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
+# Soneta.MsBuild.SDK
 
-# Introduction 
+[![NuGet](https://img.shields.io/nuget/v/Soneta.Sdk.svg)](https://www.nuget.org/packages/Soneta.Sdk)
+  [![NuGet](https://img.shields.io/nuget/dt/Soneta.Sdk.svg)](https://www.nuget.org/packages/Soneta.Sdk)
+  [![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
+  
+## Wstęp 
 Sdk stworzone przez firmę Soneta pozwalające automatycznie skonfigurować oraz uzupełnić projekty dodatków o niezbędne elementy potrzebne do współpracy z oprogramowaniem enova.
 
-# Getting Started
+## Pierwsze kroki
 W celu zaimportowania Soneta.Sdk w projekcie importującym w pliku nazwaprojektu.csproj w linii dotyczącej projektu ustawiamy: 
 ```xml
    <Project Sdk="Soneta.Sdk/numerWersji">  
@@ -21,7 +24,7 @@ W przypadku gdy w solucji znajduję się wiele projektów, by uniknąć konieczn
 ```
  Dzięki czemu w plikach .csproj wymagany będzie tylko wpis bez konieczności umieszczania numeru wersji.
 
-# Contribute
+## Współpraca
 1. Po poprawnym zbudowaniu Sdk ustawiamy się w konsoli na ścieżce \bin\Release
 2. Wykonujemy push do naszego lokalnego folderu z paczkami: 
 ```powershell
