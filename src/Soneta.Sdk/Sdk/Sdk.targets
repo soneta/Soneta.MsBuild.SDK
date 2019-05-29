@@ -49,9 +49,9 @@
     </ItemGroup>
 
     <Exec Condition="'$(SavedFile)' != '' AND '%(WorkingXmls.FullPath)' == '$(SavedFile)'"
-          Command="@(SonetaGeneratorExe) $(SavedFile) FILE" />
+          Command="&quot;@(SonetaGeneratorExe)&quot; &quot;$(SavedFile)&quot; FILE" />
     <Exec Condition="'@(SonetaSchemaReference->Count())' &gt; 0 AND '@(WorkingXmls->Count())' &gt; 0"
-          Command="@(SonetaGeneratorExe) -s &quot;@(SonetaSchemaReference,'&quot; &quot;')&quot; @(SameAssemblyBusinessXmls,' ') &quot;%(WorkingXmls.FullPath)&quot;" />
+          Command="&quot;@(SonetaGeneratorExe)&quot; -s &quot;@(SonetaSchemaReference,'&quot; &quot;')&quot; @(SameAssemblyBusinessXmls,' ') &quot;%(WorkingXmls.FullPath)&quot;" />
 
     <ItemGroup>
       <GeneratedCs Include="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')"/>
