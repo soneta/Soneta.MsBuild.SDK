@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"
+  InitialTargets="ResolveSonetaCurrentVersionDirectory"
+  DefaultTargets="WriteSonetaCurrentVersionDirectory">
+
+  <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
+    <SonetaCurrentVersionDirectory />
+    <SonetaAddonStartProgram>$(SonetaCurrentVersionDirectory)\SonetaExplorer.exe</SonetaAddonStartProgram>
+  </PropertyGroup>
+
+  <Target Name="WriteSonetaCurrentVersionDirectory"> <!-- Condition= VSBuild ? -->
+    <Message Text="SonetaCurrentVersionDirectory: $(SonetaCurrentVersionDirectory)" />
+  </Target>
+
+  <Target Name="ResolveSonetaCurrentVersionDirectory" Condition="Exists( '$(LOCALAPPDATA)\Soneta\Modules.xml' )">
+    <PropertyGroup>
+      <PS>powershell.exe -WindowStyle Hidden -Sta -NoLogo -NonInteractive -NoProfile -Command</PS>
+    </PropertyGroup>
+
+    <Exec
+      Command="$(PS) (Select-Xml '/LoadSettings/Installations/Installation[last()]/text()' $env:LOCALAPPDATA\Soneta\Modules.xml).Node.Value"
+      ConsoleToMsBuild='true' EchoOff='true'>
+        <Output TaskParameter="ConsoleOutput" PropertyName="LastModulesXmlEntry" />
+    </Exec>
+
+    <PropertyGroup Condition=" $(LastModulesXmlEntry) != '' ">
+      <SonetaCurrentVersionDirectory>&quot;$(LastModulesXmlEntry)&quot;</SonetaCurrentVersionDirectory>
+    </PropertyGroup>
+
+  </Target>
+
+</Project>
