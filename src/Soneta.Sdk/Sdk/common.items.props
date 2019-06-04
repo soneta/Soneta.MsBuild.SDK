@@ -2,8 +2,7 @@
 
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Remove="**\*.business.xml" />
-    <None Include="**\*.business.xml" Pack="true" PackagePath="schema\%(Filename)%(Extension)" >
+    <None Update="**\*.business.xml" Pack="true" PackagePath="schema\%(Filename)%(Extension)" >
       <SubType>Designer</SubType>
     </None>
     <None Remove="**\*.config.xml" />
