@@ -5,7 +5,6 @@
     <IsAddonProject Condition="'$(UsingMicrosoftNETSdk)' != 'true'">true</IsAddonProject>
   </PropertyGroup>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="'$(IsAddonProject)' == 'true'"/>
-  <Import Project="common.items.props" />
   <PropertyGroup>
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
     <IsTestProject Condition="$(IsTestProject) == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>

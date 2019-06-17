@@ -9,7 +9,8 @@
     <OutputPath Condition="$(OutputPath) == ''">$(AggregatePath)bin\$(Configuration)</OutputPath>
     <StartArguments>/extpath=$(MSBuildProjectDirectory)\$(OutputPath)\$(SonetaTargetFramework)</StartArguments>
   </PropertyGroup>
-  
+
+  <Import Project="common.items.props" />
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition=" '$(CommonTargetsPath)' == '' " />
 
   <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolveAssemblyReferences">
