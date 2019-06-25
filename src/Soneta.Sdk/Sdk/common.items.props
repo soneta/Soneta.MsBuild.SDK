@@ -54,4 +54,27 @@
     <None Remove="Properties\licenses.licx*" />
     <EmbeddedResource Include="Properties\licenses.licx*" />
   </ItemGroup>
+
+  <!--
+    MW:
+    To jest tymczasowa łąta na potrzeby VS2019. Dzięki temu możliwe jest używanie VS2019 do kompilacji Soneta
+    i gdy wywołujemy "Compile" nie jest kompilowany na nowo całe solution.
+    Problem polega na tym, że VS2019 nie radzi sobie z nuget oraz które zawierają elementy <None> <Content> z
+    oraz <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>.
+    <None> w ogóle nie działa jak należy, natomiast <Content> musi być powtórzone w csproj-u wpis PreserveNewest,
+    wtedy VS2019 nie gubi się w zmianach.
+    Mam nadzieję, że w finalnej wersji będzie OK.
+  -->
+  <ItemGroup>
+    <Content Update="\**\*.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="\**\*.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="\**\*.traineddata">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
 </Project>
