@@ -5,7 +5,13 @@
   [![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
   
 # Wstęp 
-SDK (Softwre Development Kit) jest to zestaw narzędzi dla programistów niezbędnych w tworzeniu aplikacji z danej biblioteki. Soneta SDK jest zestawem narzędzi niezbędnym do tworzenie dodatków dla sytemu enova365. Pozwala automatycznie skonfigurować projekt oraz uzupełniać projekty dodatku o niezbędne elementy potrzebne do wsprółpracy z oprogramowaniem enova365.
+SDK (Softwre Development Kit) jest to zestaw narzędzi dla programistów niezbędnych w tworzeniu aplikacji z danej biblioteki. Soneta SDK jest zestawem narzędzi niezbędnym do tworzenie dodatków dla sytemu enova365. Pozwala automatycznie skonfigurować projekt oraz uzupełniać projekty dodatku o niezbędne elementy potrzebne do wsprółpracy z oprogramowaniem enova365.Soneta.SDK jest projektem platformy .NET w którego skład wchodzą takie pliki jak:<br>
+<ul>
+  <li><b>Common.item.props</b> -plik zapewnia automatyczną obsługę dołączania nowych plików do projektu. Między innymi pliki *.pageform.xml, *dbinit.xml zostaną automatycznie skonfigurowane jako EmbeddResource.</li>
+
+  <li><b>Sdk.props</b> -plik zapewnia poprawne utworzenie referencji dla różnych typów projektów np. Dla projektu testowego zostaną załadowane biblioteki testowe.</li>
+  <li><b>Skd.targets</b> -plik przechowuje informacje dotyczące procesu budowanie m.in. automatycznego uruchamiania generatora tworzenia definicji baz danych (*.business.cs). Podsumowując prostymi słowami, od teraz nie będzie trzeba się zastanawiać, którą wersję generatora powinniśmy podpiąć, ponieważ zostanie to wykonane automatycznie.</li>
+</ul>
 
 # Pierwsze kroki
 ## Zdefiniowanie wersji Soneta.sdk.<br>
