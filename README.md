@@ -5,7 +5,7 @@
   [![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
   
 # Wstęp 
-SDK (Softwre Development Kit) jest to zestaw narzędzi dla programistów niezbędnych w tworzeniu aplikacji z danej biblioteki. Soneta SDK jest zestawem narzędzi niezbędnym do tworzenie dodatków dla sytemu enova365. Pozwala automatycznie skonfigurować projekt oraz uzupełniać projekty dodatku o niezbędne elementy potrzebne do wsprółpracy z oprogramowaniem enova365.Soneta.SDK jest projektem platformy .NET w którego skład wchodzą takie pliki jak:<br>
+SDK (Softwre Development Kit) jest to zestaw narzędzi dla programistów niezbędnych w tworzeniu aplikacji z danej biblioteki. Soneta SDK jest zestawem narzędzi niezbędnym do tworzenie dodatków dla sytemu enova365. Pozwala automatycznie skonfigurować projekt oraz uzupełniać projekty dodatku o niezbędne elementy potrzebne do wsprółpracy z oprogramowaniem enova365. Do elementów konfiguracyjnych Soneta SDK zaliczamy następujące pliki wraz z ich przeznaczeniem:<br>
 <ul>
   <li><b>Common.item.props</b> -plik zapewnia automatyczną obsługę dołączania nowych plików do projektu. Między innymi pliki *.pageform.xml, *dbinit.xml zostaną automatycznie skonfigurowane jako EmbeddResource.</li>
 
@@ -22,7 +22,7 @@ W celu zaimportowania **Soneta.Sdk** do projektu dodatku w pliku "**nazwaprojekt
 ```
 Po zapisie zmian zostanie wykonana automatyczna konfiguracja projektu.
 
-W przypadku gdy w solucji znajduję się wiele projektów, by uniknąć konieczności zmian w każdym projekcie numeru wersji, istnieje możliwość stworzenia pliku nadrzędnego **"global.json"** (poza projektami) o zawartości: 
+W przypadku gdy w solucji znajduje się wiele projektów, by uniknąć konieczności zmian w każdym projekcie numeru wersji, istnieje możliwość stworzenia pliku nadrzędnego **"global.json"** (poza projektami) o zawartości: 
 ```json
    { 
      "msbuild-sdks": { 
@@ -42,7 +42,7 @@ W przypadku gdy w solucji znajduję się wiele projektów, by uniknąć konieczn
   </PropertyGroup>
 </Project>
 ```
-Plik „**Directory.Build.props**” zawiera informację o wersji bibliotek pobieranych przez Soneta.SDK. Dzięki temu nie musimy już manualnie dodawać referencji do bibliotek Sonety tylko globalnie definiujemy wersję bibliotek z której ma korzystać dodatek. Należy tutaj wspomnieć, że dzięki takiemu rozwiązaniu możemy łatwo zmienić wersję bibliotek, którą chcemy wykorzystać w naszym dodatku. Wersję bibliotek Sonety definiujemy za pomocą parametru "**SonetaPackageVersion**" i odpowiada bezpośrednio wersji paczki [Soneta.Product.Modules](https://www.nuget.org/packages/Soneta.Products.Modules/) . W pliku „Directory.Build.props” mamy także **możliwość zdefiniowania własnych zmiennych**, które mogą być później używane w naszych projektach.<br>
+Plik „**Directory.Build.props**” zawiera informację o wersji bibliotek pobieranych przez Soneta.SDK. Dzięki temu nie musimy już manualnie dodawać referencji do bibliotek Sonety tylko globalnie definiujemy wersję bibliotek z której ma korzystać dodatek. Należy tutaj wspomnieć, że dzięki takiemu rozwiązaniu możemy łatwo zmienić wersję bibliotek, którą chcemy wykorzystać w naszym dodatku. Wersję bibliotek Sonety definiujemy za pomocą parametru "**SonetaPackageVersion**", który wskazuje na wersję paczki [Soneta.Product.Modules](https://www.nuget.org/packages/Soneta.Products.Modules/) . W pliku „Directory.Build.props” mamy także **możliwość zdefiniowania własnych zmiennych**, które mogą być później używane w naszych projektach.<br>
 Kolejnym ważnym elementem znajdującym się w pliku „Directory.Build.props jest wersja .NET, którą używamy w naszej solucji. Dzięki temu każdy plik "**.csproj**" może odwołać się do parametru **SonetaTargetFramework** zdefiniowanego w jednym miejscu. Poniżej przedstawiono zawartość pliku "***.csproj**" wykorzystujący **Soneta.sdk**.
 ```json
 <?xml version="1.0" encoding="utf-8"?>
@@ -56,12 +56,12 @@ Kolejnym ważnym elementem znajdującym się w pliku „Directory.Build.props je
 # Informacje Ogólne
 Soneta.sdk obsługuje **3 typy projektów**, które można stworzyć. W zależności od rodzaju projektu pobierane są inne biblioteki. Możemy stworzyć takie projekty jak:<br>
 <ul>
-   <li>Projekt testowy, który w swojej nazwie bedzie zawierał słowo "**Tests**"</li>
-   <li>Projekt interfejsu użytkownika kończacy się na wyrażenie "***.UI**"</li>
+   <li>Projekt testowy, który w swojej nazwie będzie zawierał słowo "**Tests**"</li>
+   <li>Projekt interfejsu użytkownika kończacy się na wyrażeniu "***.UI**"</li>
    <li>Projekt dodatku zawierający elementy logiki biznesowej</li>
 </ul>
 
-Istnieje możliwość stworzenia **projektu testowego**, kóry nie podąża za wyżej opisaną konwencją. Można to zrobić poprzez ustawienie w pliku **.csproj** flagi „**\<IsTestProject>true\</IsTestProject>**”. <br>
+Istnieje możliwość stworzenia **projektu testowego**, który nie podąża za wyżej opisaną konwencją. Można to zrobić poprzez ustawienie w pliku **.csproj** flagi „**\<IsTestProject>true\</IsTestProject>**”. <br>
 Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem generatora jest przekonwertowanie plików „.xml” na pliki „.cs”. Konwersja wykonywana jest podczas budowania dodatku.   
 
 
