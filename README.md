@@ -5,7 +5,7 @@
   [![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
   
 # Wstęp 
-SDK (Softwre Development Kit) jest to zestaw narzędzi dla programistów niezbędnych w tworzeniu aplikacji z danej biblioteki. Soneta SDK jest zestawem narzędzi niezbędnym do tworzenie dodatków dla sytemu enova365. Pozwala automatycznie skonfigurować projekt oraz uzupełniać projekty dodatku o niezbędne elementy potrzebne do wsprółpracy z oprogramowaniem enova365. Do elementów konfiguracyjnych Soneta SDK zaliczamy następujące pliki wraz z ich przeznaczeniem:<br>
+SDK (Software Development Kit) jest to zestaw narzędzi dla programistów niezbędnych w tworzeniu aplikacji z danej biblioteki. Soneta SDK jest zestawem narzędzi niezbędnym do tworzenie dodatków dla sytemu enova365. Pozwala automatycznie skonfigurować projekt oraz uzupełniać projekty dodatku o niezbędne elementy potrzebne do wsprółpracy z oprogramowaniem enova365.Soneta.SDK jest projektem platformy .NET w którego skład wchodzą takie pliki jak:<br>
 <ul>
   <li><b>Common.item.props</b> -plik zapewnia automatyczną obsługę dołączania nowych plików do projektu. Między innymi pliki *.pageform.xml, *dbinit.xml zostaną automatycznie skonfigurowane jako EmbeddResource.</li>
 
@@ -21,6 +21,7 @@ W celu zaimportowania **Soneta.Sdk** do projektu dodatku w pliku "**nazwaprojekt
    <Project Sdk="Soneta.Sdk/numerWersji">  
 ```
 Po zapisie zmian zostanie wykonana automatyczna konfiguracja projektu.
+
 
 W przypadku gdy w solucji znajduje się wiele projektów, by uniknąć konieczności zmian w każdym projekcie numeru wersji, istnieje możliwość stworzenia pliku nadrzędnego **"global.json"** (poza projektami) o zawartości: 
 ```json
@@ -62,8 +63,8 @@ Soneta.sdk obsługuje **3 typy projektów**, które można stworzyć. W zależno
 </ul>
 
 Istnieje możliwość stworzenia **projektu testowego**, który nie podąża za wyżej opisaną konwencją. Można to zrobić poprzez ustawienie w pliku **.csproj** flagi „**\<IsTestProject>true\</IsTestProject>**”. <br>
-Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem generatora jest przekonwertowanie plików „.xml” na pliki „.cs”. Konwersja wykonywana jest podczas budowania dodatku.   
 
+Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem generatora jest przekonwertowanie plików „.xml” na pliki „.cs”. Konwersja wykonywana jest podczas budowania dodatku.   
 
 # Współpraca
 1. Po poprawnym zbudowaniu Sdk ustawiamy się w konsoli na ścieżce \bin\Release
