@@ -62,7 +62,15 @@ Soneta.sdk obsługuje **3 typy projektów**, które można stworzyć. W zależno
    <li>Projekt dodatku zawierający elementy logiki biznesowej</li>
 </ul>
 
-Istnieje możliwość stworzenia **projektu testowego**, który nie podąża za wyżej opisaną konwencją. Można to zrobić poprzez ustawienie w pliku **.csproj** flagi „**\<IsTestProject>true\</IsTestProject>**”. <br>
+Istnieje możliwość stworzenia **projektu testowego**, który nie podąża za wyżej opisaną konwencją. Można to zrobić poprzez ustawienie w pliku **.csproj** flagi **\<IsTestProject>true\</IsTestProject>**.<br>
+Możemy także wykorzystać takie parametry jak:<br>
+<ul>
+  <li>AggregateOutput - przyjmuje true/false, domyślnie true. Kiedy jest ustawiony na true, to wszystkie projekty budują się do folderu bin, który będzie o poziom wyżej niż sam projekt. Dzięki temu prawie wszystkie projekty (z wyjątkiem testów) w solucji mogą budować się do zbiorczego folderu bin. Jeśli parametr jest ustawiony na false to folder bin będzie znajdował się FolderProjektu/bin/, a jeśli na false to FolderSolucji/bin/.</li>
+  <li>EnableDefaultSonetaPackageReferences – przyjmuje true/false, domyślnie true. Jeżeli parametr będzie ustawiony na false to Soneta.MsBuild.SDK nie będzie automatycznie dołączać referencji do bibliotek biznesowych.</li>
+  <li>UsingSonetaSdk- przyjmuje true/false, domyślnie true. Pozwala zdecydować czy dany projekt korzysta z Soneta.MsBuild.SDK</li>
+  <li>SonetaValueTuplePackageVersion, SonetaNUnitPackageVersion, SonetaNUnitTestAdapterPackageVersion- parametry opisujące wersję   pakietów</li>
+</ul>
+
 
 Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem generatora jest przekonwertowanie plików „.xml” na pliki „.cs”. Konwersja wykonywana jest podczas budowania dodatku.   
 
