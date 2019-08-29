@@ -31,11 +31,16 @@
 
   <Target Name="PrepareSonetaGeneratorAssets" DependsOnTargets="ResolveSonetaSchemaReferences;ResolveSonetaGeneratorExe">
     <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
+
+    <PropertyGroup>
+        <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
+    </PropertyGroup>
+
     <ItemGroup>
       <BusinessXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
       <ConfigXmls Include="@(EmbeddedResource)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
-      <WorkingXmls Include="@(BusinessXmls)"/>
-      <WorkingXmls Include="@(ConfigXmls)"/>
+      <WorkingXmls Include="@(BusinessXmls)" RemoveMetadata="$(MetadataToRemove)"/>
+      <WorkingXmls Include="@(ConfigXmls)" RemoveMetadata="$(MetadataToRemove)"/>
     </ItemGroup>
   </Target>
 
