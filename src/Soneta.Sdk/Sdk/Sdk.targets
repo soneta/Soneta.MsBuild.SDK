@@ -40,13 +40,10 @@
 
   <Target Name="ExecuteSonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets" 
           Condition=" ( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' ) AND $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0 "
-          Inputs="@(WorkingXmls)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
+          Inputs="%(WorkingXmls.Identity)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
 
-    <PropertyGroup>
-      <CurrentBusinessXml>%(WorkingXmls.Identity)</CurrentBusinessXml>
-    </PropertyGroup>
     <ItemGroup>
-      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Condition=" '%(BusinessXmls.Identity)' != '$(CurrentBusinessXml)' "/>
+      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="%(WorkingXmls.Identity)"/>
     </ItemGroup>
 
     <Exec Condition="'$(SavedFile)' != '' AND '%(WorkingXmls.FullPath)' == '$(SavedFile)'"
