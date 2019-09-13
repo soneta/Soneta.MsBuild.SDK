@@ -34,7 +34,7 @@
     <ItemGroup>
       <BusinessXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
       <WorkingXmls Include="@(BusinessXmls)"/>
-      <WorkingXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
+      <WorkingXmls Include="@(EmbeddedResource)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
     </ItemGroup>
   </Target>
 
