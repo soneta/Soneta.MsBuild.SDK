@@ -33,8 +33,9 @@
     <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
     <ItemGroup>
       <BusinessXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
+      <ConfigXmls Include="@(EmbeddedResource)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
       <WorkingXmls Include="@(BusinessXmls)"/>
-      <WorkingXmls Include="@(EmbeddedResource)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
+      <WorkingXmls Include="@(ConfigXmls)"/>
     </ItemGroup>
   </Target>
 
@@ -43,7 +44,7 @@
           Inputs="%(WorkingXmls.Identity)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
 
     <ItemGroup>
-      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="%(WorkingXmls.Identity)"/>
+      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="@(WorkingXmls->'%(Identity)'->Replace('.config.xml','.business.xml'))"/>
     </ItemGroup>
 
     <Exec Condition="'$(SavedFile)' != '' AND '%(WorkingXmls.FullPath)' == '$(SavedFile)'"
