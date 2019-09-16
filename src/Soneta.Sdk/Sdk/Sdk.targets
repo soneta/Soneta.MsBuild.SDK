@@ -39,7 +39,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="ExecuteSonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets" 
+  <Target Name="ExecuteSonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets"
           Condition=" ( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' ) AND $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0 "
           Inputs="%(WorkingXmls.Identity)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
 
