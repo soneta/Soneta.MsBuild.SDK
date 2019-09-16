@@ -45,7 +45,7 @@
 
     <ItemGroup>
       <!-- Replace-hack służy do wyeliminowania pliku X.business.xml w chwili przetwarzania skojarzonego z nim X.config.xml -->
-      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="@(WorkingXmls->'%(Identity)'->Replace('.config.xml','.business.xml'))"/>
+      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="@(WorkingXmls->'%(Identity)'->Replace('.config.xml','.business.xml')->Replace('.Config.xml','.Business.xml'))"/>
     </ItemGroup>
 
     <Exec Condition="'$(SavedFile)' != '' AND '%(WorkingXmls.FullPath)' == '$(SavedFile)'"
