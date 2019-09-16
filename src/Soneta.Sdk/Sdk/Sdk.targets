@@ -33,20 +33,19 @@
     <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
     <ItemGroup>
       <BusinessXmls Include="@(None)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
+      <ConfigXmls Include="@(EmbeddedResource)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
       <WorkingXmls Include="@(BusinessXmls)"/>
-      <WorkingXmls Include="@(EmbeddedResource)" Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"/>
+      <WorkingXmls Include="@(ConfigXmls)"/>
     </ItemGroup>
   </Target>
 
   <Target Name="ExecuteSonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets" 
           Condition=" ( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' ) AND $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0 "
-          Inputs="@(WorkingXmls)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
+          Inputs="%(WorkingXmls.Identity)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
 
-    <PropertyGroup>
-      <CurrentBusinessXml>%(WorkingXmls.Identity)</CurrentBusinessXml>
-    </PropertyGroup>
     <ItemGroup>
-      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Condition=" '%(BusinessXmls.Identity)' != '$(CurrentBusinessXml)' "/>
+      <!-- Replace-hack służy do wyeliminowania pliku X.business.xml w chwili przetwarzania skojarzonego z nim X.config.xml -->
+      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="@(WorkingXmls->'%(Identity)'->Replace('.config.xml','.business.xml'))"/>
     </ItemGroup>
 
     <Exec Condition="'$(SavedFile)' != '' AND '%(WorkingXmls.FullPath)' == '$(SavedFile)'"
