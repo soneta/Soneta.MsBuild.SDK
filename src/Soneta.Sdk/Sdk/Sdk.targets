@@ -39,13 +39,13 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="ExecuteSonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets" 
+  <Target Name="ExecuteSonetaGenerator" BeforeTargets="CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets"
           Condition=" ( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' ) AND $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0 "
           Inputs="%(WorkingXmls.Identity)" Outputs="@(WorkingXmls->'%(RelativeDir)%(Filename).cs')">
 
     <ItemGroup>
       <!-- Replace-hack służy do wyeliminowania pliku X.business.xml w chwili przetwarzania skojarzonego z nim X.config.xml -->
-      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="@(WorkingXmls->'%(Identity)'->Replace('.config.xml','.business.xml'))"/>
+      <SameAssemblyBusinessXmls Include="@(BusinessXmls)" Exclude="@(WorkingXmls->'%(Identity)'->Replace('.config.xml','.business.xml')->Replace('.Config.xml','.Business.xml'))"/>
     </ItemGroup>
 
     <Exec Condition="'$(SavedFile)' != '' AND '%(WorkingXmls.FullPath)' == '$(SavedFile)'"
