@@ -83,4 +83,7 @@ dotnet nuget push nazwaPaczki.nupkg -s C:\Users....nuget\packages
 ``` 
 3. Dzięki powyższym czynnościom nasze SDK będzie widoczne dla naszych nowo utworzonych projektów. 
 
+# Proces wydawania nowych wersji
+Dokument [instrukcja wydania] szczegółowo opisuje potrzebne czynności zmierzające do wydania nowej wersji.
 
+[instrukcja wydania]: RELEASING.md
