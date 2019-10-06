@@ -2,12 +2,17 @@
 
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
+  <PropertyGroup Condition="'$(AggregateOutput)' == 'true'">
+    <AggregatePath Condition="$(AggregatePath) == ''">..</AggregatePath>
+    <OutputPath Condition="$(OutputPath) != ''">$(AggregatePath)\$(OutputPath)</OutputPath>
+    <OutputPath Condition="$(OutputPath) == ''">$(AggregatePath)\bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Debug' AND '$(IsTestProject)' != 'true' AND $(StartProgram) == '' AND Exists($(SonetaAddonStartProgram))">
     <StartAction>Program</StartAction>
     <StartProgram>$(SonetaAddonStartProgram)</StartProgram>
-    <AggregatePath Condition="'$(AggregateOutput)' == 'true'">..\</AggregatePath>
-    <OutputPath Condition="$(OutputPath) == ''">$(AggregatePath)bin\$(Configuration)</OutputPath>
-    <StartArguments>/extpath=$(MSBuildProjectDirectory)\$(OutputPath)\$(SonetaTargetFramework)</StartArguments>
+    <OutputPath Condition="$(OutputPath) == ''">bin\$(Configuration)\</OutputPath>
+    <StartArguments>/extpath=$(MSBuildProjectDirectory)\$(OutputPath)\</StartArguments>
+    <StartArguments Condition="'$(AppendTargetFrameworkToOutputPath)' != 'false'">$(StartArguments)$(SonetaTargetFramework)\</StartArguments>
   </PropertyGroup>
 
   <Import Project="common.items.props" />
