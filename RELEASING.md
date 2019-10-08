@@ -26,7 +26,7 @@ Proces publikacji paczki _NuGet_ uruchomiony został automatycznie. Jest realizo
 
 1. Po weryfikacji wersji do wydania utworzyć i opublikować tag w punkcie w jakim znajduje się gałąź `master`
    ```
-   git tag x.y.z origin/master
+   git tag -a x.y.z origin/master
    git push origin --tags
    ```
 2. Na gałęzi `develop` **przywrócić część _prerelease_** i podnieść numer wersji `<x.y.z+1>-beta.{height}` w pliku [version.json]
