@@ -24,8 +24,13 @@ Proces publikacji paczki _NuGet_ uruchomiony został automatycznie. Jest realizo
 
 ### Czynności ręczne po wydaniu
 
-1. Na gałęzi `develop` **przywrócić część _prerelease_** i podnieść numer wersji `<x.y.z+1>-beta.{height}` w pliku [version.json]
-2. Utworzyć i opublikować commit z komunikatem stwierdzającym o zmianie wersji.
+1. Po weryfikacji wersji do wydania utworzyć i opublikować tag w punkcie w jakim znajduje się gałąź `master`
+   ```
+   git tag x.y.z origin/master
+   git push origin --tags
+   ```
+2. Na gałęzi `develop` **przywrócić część _prerelease_** i podnieść numer wersji `<x.y.z+1>-beta.{height}` w pliku [version.json]
+3. Utworzyć i opublikować commit z komunikatem stwierdzającym o zmianie wersji.
    ```
    git commit -m "Wersja następna: x.y.z+1-prerelease"
    git push origin develop
