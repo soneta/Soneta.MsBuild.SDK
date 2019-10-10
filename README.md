@@ -75,7 +75,7 @@ Możemy także wykorzystać takie parametry jak:<br>
 Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem generatora jest przekonwertowanie plików „.xml” na pliki „.cs”. Konwersja wykonywana jest podczas budowania dodatku.   
 
 # Studium przypadku
-## Korzystanie z bibliotek Soneta nie dostarczanych automatycznie przez **Soneta.MsBuild.SDK** (na przykładzie dodatków opartych o biblioteki WinForms)
+## Korzystanie z bibliotek Soneta, nie dostarczanych automatycznie przez **Soneta.MsBuild.SDK** (na przykładzie dodatków opartych o biblioteki WinForms)
 
 W wielu przypadkach do utworzenia lub zaktualizowania dodatku w oparciu o Soneta Sdk, wszystkie niezbędne biblioteki Soneta zostaną dostarczone automatycznie.
 Czasem jednak istnieje potrzeba skorzystania z bibliotek nie ujętych w zakresie **SonetaPackage**. Przykładem może być aktualizacja dodatku, którego interfejs użytkowanika został zbudowany przed wprowadzeniem mechanizmu form.xml, za pomocą bibliotek opartych o technologię WinForms. **W większości przypadków najlepszym rozwiązaniem takiego problemu jest zaktualizowanie dodatku do formatu form.xml, który jest w pełni wspierany i kompatybilny z Sdk**.
@@ -84,8 +84,9 @@ Z przyczyn biznesowych lub technicznych takie rozwiązanie nie zawsze jest możl
 
 ```
 <Reference Include="Soneta.Forms">
-	<HintPath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\Soneta.Forms.dll</HintPath>
-	<Private>false</Private>
+  <HintPath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\Soneta.Forms.dll</HintPath>
+  <SpecificVersion>false</SpecificVersion>
+  <Private>false</Private>
 </Reference>
 
 ```
@@ -99,7 +100,7 @@ Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można poda
 
 W takim wypadku nie ma potrzeby dłużej korzystać z elementu HintPath.
 
-Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja obu bibliotek powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** do nowszej biblioteki nadal mogą zachować zgodność, o ile nie zaszły w nich znaczące zmiany. W takim wypadku konieczne będzie zaktualizowanie referencji do nowszej wersji bibliotek.
+Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja obu bibliotek powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** do nowszej biblioteki nadal mogą zachować zgodność, o ile nie zaszły w nich znaczące zmiany. W takim wypadku konieczne będzie zaktualizowanie referencji do nowszej wersji bibliotek Soneta.
 
 # Współpraca
 W celu zaproponowania zmian należy stworzyć Pull Request do gałęzi develop. Po podjęciu decyzji o wydaniu nowej wersji branch develop zostanie zmergowany do mastera i dodatek zostanie automatycznie wydany. 
