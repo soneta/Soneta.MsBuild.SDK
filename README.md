@@ -91,16 +91,14 @@ Z przyczyn biznesowych lub technicznych takie rozwiązanie nie zawsze jest możl
 
 ```
 
-Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można podać lokalizację, pod którą będą one wyszukiwane.
+Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można podać lokalizację, pod którą będą one wyszukiwane. W takim wypadku nie ma potrzeby dłużej korzystać z elementu HintPath.
 
 ```
 <ReferencePath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\</ReferencePath>
 <AssemblySearchPaths>$(AssemblySearchPaths);$(ReferencePath);</AssemblySearchPaths>
 ```
 
-W takim wypadku nie ma potrzeby dłużej korzystać z elementu HintPath.
-
-Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja bibliotek dostarczanych z obu źródeł powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** pomimo różnicy wersji bibliotek DLL, nadal mogą one zachować zgodność. Może się jednak okazać, że w nowej paczce **SonetaPackage** zaszły znaczące zmiany uniemożliwiające dalsze współdziałanie bibliotek. W takim wypadku konieczne będzie zaktualizowanie referencji w dodatku do nowszej wersji bibliotek Soneta.
+Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja bibliotek z obu źródeł powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** pomimo różnicy wersji bibliotek DLL, nadal mogą one zachować zgodność. Może się jednak okazać, że w nowej paczce **SonetaPackage** zaszły znaczące zmiany uniemożliwiające dalsze współdziałanie bibliotek. W takim wypadku konieczne będzie zaktualizowanie referencji w dodatku do nowszej wersji bibliotek Soneta.
 
 # Współpraca
 W celu zaproponowania zmian należy stworzyć Pull Request do gałęzi develop. Po podjęciu decyzji o wydaniu nowej wersji branch develop zostanie zmergowany do mastera i dodatek zostanie automatycznie wydany. 
