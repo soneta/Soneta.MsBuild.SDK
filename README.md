@@ -65,7 +65,8 @@ Soneta.sdk obsługuje **3 typy projektów**, które można stworzyć. W zależno
 Istnieje możliwość stworzenia **projektu testowego**, który nie podąża za wyżej opisaną konwencją. Można to zrobić poprzez ustawienie w pliku **.csproj** flagi **\<IsTestProject>true\</IsTestProject>**.<br>
 Możemy także wykorzystać takie parametry jak:<br>
 <ul>
-  <li>AggregateOutput - przyjmuje true/false, domyślnie true. Kiedy jest ustawiony na true, to wszystkie projekty budują się do folderu bin, który będzie o poziom wyżej niż sam projekt. Dzięki temu prawie wszystkie projekty (z wyjątkiem testów) w solucji mogą budować się do zbiorczego folderu bin. Jeśli parametr jest ustawiony na false to folder bin będzie znajdował się FolderProjektu/bin/, a jeśli na false to FolderSolucji/bin/.</li>
+  <li>AggregateOutput - przyjmuje true/false, domyślnie true. Ustawiony na true, sprawia, iż wszystkie projekty (z wyjątkiem projektu testów) budują się do zbiorczego folderu. Domyślnie będzie on znajdował się o poziom wyżej niż sam folder zawierający projekt: '..\bin' lub w innej lokalizacji jawnie przypisanej do parametru AggregatePath. Parametr ten gromadzi output niemal wszystkich projektów solucji we wspólnej lokalizacji nie tracąc przy tym struktury folderów dla domyślnie wyliczanego parametru OutputPath (np. ..\bin\debug\net46\). Jeśli parametr jest ustawiony na false, zostanie przywrócone domyślne zachowanie. Oznacza to, że folderem decelowym dla każdego projektu będzie ten folder, w którym znajduje się plik projektu.</li>
+  <li>AggregatePath - domyślnie '..\' (folder nadrzędny względem bieżącego foldera). W przypadku, gdy parametr AggregateOutput ustawiony jest na true, jest to ścieżka względna lub bezwzględna, która zostanie dodana na początku automatycznie wyliczonego atrybutu OutputPath. W przypadku domyślnych ustawień ostateczna wartość OutputPath może przyjąć postać np. '..\bin\debug\net46\'. Jeśli OutputPath zostanie ustawione jawnie w projekcie lub pliku Directory.Build, AggregatePath zostanie zignorowane. W takim wypadku wszystkie pliki generowane przez projekt zostaną wrzucone bezpośrednio do lokalizacji jawnie wskazanej przez parametr OutputPath. Celem wprowadzenia parametru AggregateOutput i AggregatePath było umożliwienie budowania wielu projektów do wspólnej lokalizacji.</li>
   <li>EnableDefaultSonetaPackageReferences – przyjmuje true/false, domyślnie true. Jeżeli parametr będzie ustawiony na false to Soneta.MsBuild.SDK nie będzie automatycznie dołączać referencji do bibliotek biznesowych.</li>
   <li>UsingSonetaSdk- przyjmuje true/false, domyślnie true. Pozwala zdecydować czy dany projekt korzysta z Soneta.MsBuild.SDK</li>
   <li>SonetaValueTuplePackageVersion, SonetaNUnitPackageVersion, SonetaNUnitTestAdapterPackageVersion- parametry opisujące wersję   pakietów</li>
@@ -73,6 +74,32 @@ Możemy także wykorzystać takie parametry jak:<br>
 
 
 Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem generatora jest przekonwertowanie plików „.xml” na pliki „.cs”. Konwersja wykonywana jest podczas budowania dodatku.   
+
+# Studium przypadku
+## Korzystanie z bibliotek Soneta, niedostarczanych automatycznie przez **Soneta.MsBuild.SDK** (na przykładzie dodatków opartych o biblioteki WinForms)
+
+W wielu przypadkach do utworzenia lub zaktualizowania dodatku w oparciu o Soneta Sdk, wszystkie niezbędne biblioteki Soneta zostaną dostarczone automatycznie.
+Czasem jednak istnieje potrzeba skorzystania z bibliotek nie ujętych w zakresie **SonetaPackage**. Przykładem może być aktualizacja dodatku, którego interfejs użytkownika został zbudowany przed wprowadzeniem mechanizmu form.xml, za pomocą bibliotek opartych o technologię WinForms. **W większości przypadków najlepszym rozwiązaniem takiego problemu jest zaktualizowanie dodatku do formatu form.xml, który jest w pełni wspierany i kompatybilny z Sdk**.
+
+Z przyczyn biznesowych lub technicznych takie rozwiązanie nie zawsze jest możliwe. Aby mimo wszystko umożliwić takim dodatkom korzystanie z **Soneta.MsBuild.SDK** można "ręcznie" zareferować do brakujących bibliotek, np. znajdujących się w folderze instalacyjnym programu enova365.
+
+```
+<Reference Include="Soneta.Forms">
+  <HintPath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\Soneta.Forms.dll</HintPath>
+  <SpecificVersion>false</SpecificVersion>
+  <Private>false</Private>
+</Reference>
+
+```
+
+Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można podać lokalizację, pod którą będą one wyszukiwane. W takim wypadku nie ma potrzeby dłużej korzystać z elementu HintPath.
+
+```
+<ReferencePath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\</ReferencePath>
+<AssemblySearchPaths>$(AssemblySearchPaths);$(ReferencePath);</AssemblySearchPaths>
+```
+
+Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja bibliotek z obu źródeł powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** pomimo różnicy wersji bibliotek DLL, nadal mogą one zachować zgodność. Może się jednak okazać, że w nowej paczce **SonetaPackage** zaszły znaczące zmiany uniemożliwiające dalsze współdziałanie bibliotek. W takim wypadku konieczne będzie zaktualizowanie referencji w dodatku do nowszej wersji bibliotek Soneta.
 
 # Współpraca
 W celu zaproponowania zmian należy stworzyć Pull Request do gałęzi develop. Po podjęciu decyzji o wydaniu nowej wersji branch develop zostanie zmergowany do mastera i dodatek zostanie automatycznie wydany. 
