@@ -10,7 +10,7 @@
   <Import Project="common.items.props" />
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 
-  <PropertyGroup Condition="$(Configuration) == 'Debug' AND '$(IsTestProject)' != 'true' AND $(StartProgram) == '' AND Exists($(SonetaAddonStartProgram))">
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true' AND $(StartProgram) == '' AND Exists($(SonetaAddonStartProgram))">
     <StartAction>Program</StartAction>
     <StartProgram>$(SonetaAddonStartProgram)</StartProgram>
     <StartArguments>/extpath=$(MSBuildProjectDirectory)\$(OutputPath)</StartArguments>
