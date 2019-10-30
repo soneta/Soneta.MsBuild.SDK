@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <Import Project="common.items.props" />
-  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition=" '$(CommonTargetsPath)' == '' " />
 
   <PropertyGroup Condition="$(Configuration) == 'Debug' AND '$(IsTestProject)' != 'true' AND $(StartProgram) == '' AND Exists($(SonetaAddonStartProgram))">
     <StartAction>Program</StartAction>
