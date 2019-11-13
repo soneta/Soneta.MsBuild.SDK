@@ -13,6 +13,8 @@
     <SonetaValueTuplePackageVersion>4.4.0</SonetaValueTuplePackageVersion>
     <SonetaNUnitPackageVersion>3.11.0</SonetaNUnitPackageVersion>
     <SonetaNUnitTestAdapterPackageVersion>3.13.0</SonetaNUnitTestAdapterPackageVersion>
+    <SonetaNSubstitutePackageVersion>4.2.1</SonetaNSubstitutePackageVersion>
+    <SonetaFluentAssertionsPackageVersion>5.9.0</SonetaFluentAssertionsPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
   </PropertyGroup>
   <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
@@ -30,8 +32,8 @@
   <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' != 'true'">
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit" Version="$(SonetaNUnitPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NSubstitute" Version="1.10.0" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="FluentAssertions" Version="4.19.2" />
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NSubstitute" Version="$(SonetaNSubstitutePackageVersion)" />
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="FluentAssertions" Version="$(SonetaFluentAssertionsPackageVersion)" />
     <PackageReference Include="System.ValueTuple" Version="$(SonetaValueTuplePackageVersion)" />
   </ItemGroup>
 </Project>
