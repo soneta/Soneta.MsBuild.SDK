@@ -81,22 +81,25 @@ Wraz z bibliotekami jest pobierana odpowiednia wersja generatora. Zadaniem gener
 W wielu przypadkach do utworzenia lub zaktualizowania dodatku w oparciu o Soneta Sdk, wszystkie niezbędne biblioteki Soneta zostaną dostarczone automatycznie.
 Czasem jednak istnieje potrzeba skorzystania z bibliotek nie ujętych w zakresie **SonetaPackage**. Przykładem może być aktualizacja dodatku, którego interfejs użytkownika został zbudowany przed wprowadzeniem mechanizmu form.xml, za pomocą bibliotek opartych o technologię WinForms. **W większości przypadków najlepszym rozwiązaniem takiego problemu jest zaktualizowanie dodatku do formatu form.xml, który jest w pełni wspierany i kompatybilny z Sdk**.
 
-Z przyczyn biznesowych lub technicznych takie rozwiązanie nie zawsze jest możliwe. Aby mimo wszystko umożliwić takim dodatkom korzystanie z **Soneta.MsBuild.SDK** można "ręcznie" zareferować do brakujących bibliotek, np. znajdujących się w folderze instalacyjnym programu enova365.
+Z przyczyn biznesowych lub technicznych takie rozwiązanie nie zawsze jest możliwe. Aby mimo wszystko umożliwić takim dodatkom korzystanie z **Soneta.MsBuild.SDK** można jawnie zareferować do brakujących bibliotek, np. znajdujących się w folderze instalacyjnym programu enova365. Z poziomu **Visual Studio** referencję można dodać bezpośrednio z interfejsu użytkownika. W tym celu w oknie eksploratora solucji należy kliknąć odpowiedni projekt dodatku prawym przyciskiem myszy. Następnie, w menu kontekstowym, wybrać Add/Reference i wskazać odpowiedni plik DLL. Referencję można także dodać bezpośrednio w pliku projektu \*.csproj, dopisując do niego poniższy fragment kodu. 
 
 ```
-<Reference Include="Soneta.Forms">
-  <HintPath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\Soneta.Forms.dll</HintPath>
-  <SpecificVersion>false</SpecificVersion>
-  <Private>false</Private>
-</Reference>
-
+<ItemGroup>
+  <Reference Include="Soneta.Forms">
+    <HintPath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\Soneta.Forms.dll</HintPath>
+    <SpecificVersion>false</SpecificVersion>
+    <Private>false</Private>
+  </Reference>
+</ItemGroup>
 ```
 
-Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można podać lokalizację, pod którą będą one wyszukiwane. W takim wypadku nie ma potrzeby dłużej korzystać z elementu HintPath.
+Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można podać lokalizację, pod którą będą one wyszukiwane. W takim wypadku nie ma potrzeby dłużej korzystać z elementu HintPath. W tym celu w pliku projektu należy dodać poniższy fragment, gdzie w elemencie **ReferencePath** należy umieścić ścieżkę do folderu zawierającego biblioteki, do których odnosi się referencja.
 
 ```
-<ReferencePath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\</ReferencePath>
-<AssemblySearchPaths>$(AssemblySearchPaths);$(ReferencePath);</AssemblySearchPaths>
+<PropertyGroup>
+  <ReferencePath>C:\Program Files (x86)\Soneta\enova365 1908.0.1.17324\</ReferencePath>
+  <AssemblySearchPaths>$(AssemblySearchPaths);$(ReferencePath);</AssemblySearchPaths>
+</PropertyGroup>
 ```
 
 Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja bibliotek z obu źródeł powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** pomimo różnicy wersji bibliotek DLL, nadal mogą one zachować zgodność. Może się jednak okazać, że w nowej paczce **SonetaPackage** zaszły znaczące zmiany uniemożliwiające dalsze współdziałanie bibliotek. W takim wypadku konieczne będzie zaktualizowanie referencji w dodatku do nowszej wersji bibliotek Soneta.
