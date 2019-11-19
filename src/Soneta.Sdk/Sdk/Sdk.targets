@@ -7,6 +7,12 @@
     <BaseOutputPath>$(AggregatePath)bin\</BaseOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GlobalJsonFilePath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), global.json))\global.json</GlobalJsonFilePath>
+    <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
+    <PS>powershell.exe -WindowStyle Hidden -Sta -NoLogo -NonInteractive -NoProfile -Command</PS>
+  </PropertyGroup>
+
   <Import Project="common.items.props" />
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition=" '$(CommonTargetsPath)' == '' " />
 
@@ -17,6 +23,23 @@
     <RunCommand>$(StartProgram)</RunCommand>
     <RunArguments>$(StartArguments)</RunArguments>
   </PropertyGroup>
+
+  <Target Name="WriteSonetaSdkLatestVersion" BeforeTargets="Restore">
+    <Exec Command="$(PS) (Invoke-RestMethod -Uri 'https://api.nuget.org/v3-flatcontainer/soneta.sdk/index.json').versions[-1]" ConsoleToMsBuild='true' EchoOff='true'>
+      <Output TaskParameter="ConsoleOutput" PropertyName="SonetaSdkLatestVersion" />
+    </Exec>
+    <WriteLinesToFile File="$(SonetaSdkLatestVersionFilePath)" Overwrite="true" Lines="$(SonetaSdkLatestVersion)" />
+  </Target>
+
+  <Target Name="CheckSonetaSdkCurrentVersion" BeforeTargets="Build" Condition="Exists($(GlobalJsonFilePath))">
+    <Exec Command="$(PS) &quot;(Get-Content '$(GlobalJsonFilePath)' | ConvertFrom-Json).'msbuild-sdks'.'Soneta.Sdk'&quot;" ConsoleToMsBuild='true' EchoOff='true'>
+      <Output TaskParameter="ConsoleOutput" PropertyName="SonetaSdkCurrentVersion" />
+    </Exec>
+    <ReadLinesFromFile File="$(SonetaSdkLatestVersionFilePath)">
+      <Output TaskParameter="Lines" PropertyName="SonetaSdkLatestVersion"/>
+    </ReadLinesFromFile>
+    <Warning Text="Aktualnie używana wersja 'Soneta.Sdk' to: '$(SonetaSdkCurrentVersion)', istnieje nowsza wersja: '$(SonetaSdkLatestVersion)'. Aby ją ustawić, w pliku 'global.json' należy zamienić aktualny numer wesji 'Soneta.Sdk' na nowy." Condition="$(SonetaSdkLatestVersion) > $(SonetaSdkCurrentVersion)" />
+  </Target>
 
   <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolveAssemblyReferences">
     <ItemGroup>
@@ -38,7 +61,7 @@
     <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
 
     <PropertyGroup>
-        <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
+      <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
     </PropertyGroup>
 
     <ItemGroup>
