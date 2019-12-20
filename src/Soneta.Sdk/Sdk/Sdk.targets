@@ -10,7 +10,8 @@
   <PropertyGroup>
     <GlobalJsonFilePath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), global.json))\global.json</GlobalJsonFilePath>
     <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
-    <PS>powershell.exe -WindowStyle Hidden -Sta -NoLogo -NonInteractive -NoProfile -Command</PS>
+    <SonetaSdkNugetApiUrl>https://api.nuget.org/v3-flatcontainer/soneta.sdk/index.json</SonetaSdkNugetApiUrl>
+    <SonetaSdkUpdateInterval Condition="'$(SonetaSdkUpdateInterval)' == ''">1</SonetaSdkUpdateInterval>
   </PropertyGroup>
 
   <Import Project="common.items.props" />
@@ -24,21 +25,107 @@
     <RunArguments>$(StartArguments)</RunArguments>
   </PropertyGroup>
 
-  <Target Name="WriteSonetaSdkLatestVersion" BeforeTargets="Restore">
-    <Exec Command="$(PS) (Invoke-RestMethod -Uri 'https://api.nuget.org/v3-flatcontainer/soneta.sdk/index.json').versions[-1]" ConsoleToMsBuild='true' EchoOff='true'>
-      <Output TaskParameter="ConsoleOutput" PropertyName="SonetaSdkLatestVersion" />
-    </Exec>
-    <WriteLinesToFile File="$(SonetaSdkLatestVersionFilePath)" Overwrite="true" Lines="$(SonetaSdkLatestVersion)" />
-  </Target>
+  <UsingTask TaskName="CheckForSdkUpdates" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildBinPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <GlobalJsonFilePath ParameterType="System.String" Required="true" />
+      <LatestVersionFilePath ParameterType="System.String" Required="true" />
+      <NugetApiUrl ParameterType="System.String" Required="true" />
+      <SdkName ParameterType="System.String" Required="true" />
+      <UpdateInterval ParameterType="System.Int32" Required="true" />
+      <IsUpdateAvailable ParameterType="System.Boolean" Output="true" />
+      <CurrentVersion ParameterType="System.String" Output="true" />
+      <LatestVersion ParameterType="System.String" Output="true" />
+    </ParameterGroup>
 
-  <Target Name="CheckSonetaSdkCurrentVersion" BeforeTargets="Build" Condition="Exists($(GlobalJsonFilePath))">
-    <Exec Command="$(PS) &quot;(Get-Content '$(GlobalJsonFilePath)' | ConvertFrom-Json).'msbuild-sdks'.'Soneta.Sdk'&quot;" ConsoleToMsBuild='true' EchoOff='true'>
-      <Output TaskParameter="ConsoleOutput" PropertyName="SonetaSdkCurrentVersion" />
-    </Exec>
-    <ReadLinesFromFile File="$(SonetaSdkLatestVersionFilePath)">
-      <Output TaskParameter="Lines" PropertyName="SonetaSdkLatestVersion"/>
-    </ReadLinesFromFile>
-    <Warning Text="Aktualnie używana wersja 'Soneta.Sdk' to: '$(SonetaSdkCurrentVersion)', istnieje nowsza wersja: '$(SonetaSdkLatestVersion)'. Aby ją ustawić, w pliku 'global.json' należy zamienić aktualny numer wesji 'Soneta.Sdk' na nowy." Condition="$(SonetaSdkLatestVersion) > $(SonetaSdkCurrentVersion)" />
+    <Task>
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Net.Http" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Method" Language="cs">
+        <![CDATA[
+        public override bool Execute()
+        {
+            CurrentVersion = GetCurrentVersion();
+            LatestVersion = GetLatestVersion();
+            IsUpdateAvailable = CheckIfUpdateAvailable(CurrentVersion, LatestVersion);
+
+            return true;
+        }
+
+        private string GetCurrentVersion()
+        {
+            if (File.Exists(GlobalJsonFilePath))
+            {
+                var json = File.ReadAllText(GlobalJsonFilePath);
+                var pattern = $@"(?<=""{SdkName}""\s*:\s*"")[0-9]+\.[0-9]+\.[0-9]+.*?(?="")";
+                return GetMatchingValue(json, pattern);
+            }
+
+            return null;
+        }
+
+        private string GetLatestVersion()
+        {
+            var lastWriteTime = File.GetLastWriteTime(LatestVersionFilePath);
+            var updateTime = lastWriteTime.AddMinutes(UpdateInterval);
+
+            if (updateTime < DateTime.Now)
+            {
+                var latestVersion = GetLastVersionFromApi();
+
+                using (var sw = File.CreateText(LatestVersionFilePath))
+                    sw.WriteLine(latestVersion);
+
+                return latestVersion;
+            }
+            else
+            {
+                return File.ReadAllText(LatestVersionFilePath).Trim();
+            }
+        }
+
+        private string GetLastVersionFromApi()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var json = httpClient.GetStringAsync(NugetApiUrl).Result;
+                var pattern = $@"(?<="")[0-9]+\.[0-9]+\.[0-9]+.*?(?=""\s*])";
+                return GetMatchingValue(json, pattern);
+            }
+        }
+
+        private string GetMatchingValue(string json, string pattern)
+        {
+            var match = Regex.Match(json, pattern);
+            return match.Value;
+        }
+
+        private static bool CheckIfUpdateAvailable(string current, string latest)
+        {
+            if (string.IsNullOrEmpty(current) || string.IsNullOrEmpty(latest))
+                return false;
+
+            var currentVersion = new Version(current);
+            var latestVersion = new Version(latest);
+            return currentVersion.CompareTo(latestVersion) is -1;
+        }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="SonetaSdkCheckForUpdates" AfterTargets="Build" Condition="Exists($(GlobalJsonFilePath))">
+    <CheckForSdkUpdates
+      GlobalJsonFilePath="$(GlobalJsonFilePath)"
+      LatestVersionFilePath="$(SonetaSdkLatestVersionFilePath)"
+      NugetApiUrl="$(SonetaSdkNugetApiUrl)"
+      SdkName="Soneta.Sdk"
+      UpdateInterval="$(SonetaSdkUpdateInterval)">
+      <Output TaskParameter="IsUpdateAvailable" PropertyName="IsSonetaSdkUpdateAvailable" />
+      <Output TaskParameter="CurrentVersion" PropertyName="SonetaSdkCurrentVersion" />
+      <Output TaskParameter="LatestVersion" PropertyName="SonetaSdkLatestVersion" />
+    </CheckForSdkUpdates>
+    <Warning Condition="$(IsSonetaSdkUpdateAvailable)" Text="Aktualnie używana wersja 'Soneta.Sdk' to: '$(SonetaSdkCurrentVersion)', istnieje nowsza wersja: '$(SonetaSdkLatestVersion)'. Aby ją ustawić, w pliku 'global.json' należy zamienić aktualny numer wesji 'Soneta.Sdk' na nowy." />
   </Target>
 
   <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolveAssemblyReferences">
