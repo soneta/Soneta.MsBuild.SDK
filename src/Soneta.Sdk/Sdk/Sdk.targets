@@ -43,6 +43,9 @@
       <Using Namespace="System.Text.RegularExpressions" />
       <Code Type="Method" Language="cs">
         <![CDATA[
+        private const string GlobalJsonSdkVersionPattern = @"(?<=""Soneta.Sdk""\s*:\s*"")[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?(?=.*?"")";
+        private const string NugetApiLatestVersionPattern = @"(?<="")[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?(?=.*?""\s*])";
+        
         public override bool Execute()
         {
             CurrentVersion = GetCurrentVersion();
@@ -57,8 +60,7 @@
             if (File.Exists(GlobalJsonFilePath))
             {
                 var json = File.ReadAllText(GlobalJsonFilePath);
-                var pattern = $@"(?<=""{SdkName}""\s*:\s*"")[0-9]+\.[0-9]+\.[0-9]+.*?(?="")";
-                return GetMatchingValue(json, pattern);
+                return GetMatchingValue(json, GlobalJsonSdkVersionPattern);
             }
 
             return null;
@@ -89,8 +91,7 @@
             using (var httpClient = new HttpClient())
             {
                 var json = httpClient.GetStringAsync(NugetApiUrl).Result;
-                var pattern = $@"(?<="")[0-9]+\.[0-9]+\.[0-9]+.*?(?=""\s*])";
-                return GetMatchingValue(json, pattern);
+                return GetMatchingValue(json, NugetApiLatestVersionPattern);
             }
         }
 
