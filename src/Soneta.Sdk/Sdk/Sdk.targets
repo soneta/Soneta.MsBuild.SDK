@@ -11,7 +11,8 @@
     <GlobalJsonFilePath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), global.json))\global.json</GlobalJsonFilePath>
     <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
     <SonetaSdkNugetApiUrl>https://api.nuget.org/v3-flatcontainer/soneta.sdk/index.json</SonetaSdkNugetApiUrl>
-    <SonetaSdkUpdateInterval Condition="'$(SonetaSdkUpdateInterval)' == ''">1</SonetaSdkUpdateInterval>
+    <SonetaSdkUpdateIntervalValue Condition="'$(SonetaSdkUpdateIntervalValue)' == ''">1</SonetaSdkUpdateIntervalValue>
+    <SonetaSdkUpdateIntervalTime Condition="'$(SonetaSdkUpdateIntervalTime)' == ''">Minutes</SonetaSdkUpdateIntervalTime>
   </PropertyGroup>
 
   <Import Project="common.items.props" />
@@ -30,8 +31,8 @@
       <GlobalJsonFilePath ParameterType="System.String" Required="true" />
       <LatestVersionFilePath ParameterType="System.String" Required="true" />
       <NugetApiUrl ParameterType="System.String" Required="true" />
-      <SdkName ParameterType="System.String" Required="true" />
       <UpdateInterval ParameterType="System.Int32" Required="true" />
+      <UpdateIntervalUnit ParameterType="System.String" Required="true" />
       <IsUpdateAvailable ParameterType="System.Boolean" Output="true" />
       <CurrentVersion ParameterType="System.String" Output="true" />
       <LatestVersion ParameterType="System.String" Output="true" />
@@ -43,9 +44,21 @@
       <Using Namespace="System.Text.RegularExpressions" />
       <Code Type="Method" Language="cs">
         <![CDATA[
+        public enum TimeUnit
+        {
+            None,
+            Seconds,
+            Minutes,
+            Hours,
+            Days,
+            Weeks,
+            Months,
+            Years
+        }
+
         private const string GlobalJsonSdkVersionPattern = @"(?<=""Soneta.Sdk""\s*:\s*"")([0-9]+\.?){3,}(?=.*?"")";
         private const string NugetApiLatestVersionPattern = @"(?<="")([0-9]+\.?){3,}(?=.*?""\s*])";
-        
+
         public override bool Execute()
         {
             CurrentVersion = GetCurrentVersion();
@@ -66,27 +79,52 @@
             return null;
         }
 
+        private string GetMatchingValue(string json, string pattern)
+        {
+            var match = Regex.Match(json, pattern);
+            return match.Value;
+        }
+
         private string GetLatestVersion()
         {
+            return CalculateUpdateCheckTime() < DateTime.Now ? 
+                GetRemoteVersion() : GetLocalVersion();
+        }
+
+        private DateTime CalculateUpdateCheckTime() 
+        {
             var lastWriteTime = File.GetLastWriteTime(LatestVersionFilePath);
-            var updateTime = lastWriteTime.AddMinutes(UpdateInterval);
+            Enum.TryParse(UpdateIntervalUnit, out TimeUnit unit);
 
-            if (updateTime < DateTime.Now)
+            switch (unit)
             {
-                var latestVersion = GetLastVersionFromApi();
-
-                using (var sw = File.CreateText(LatestVersionFilePath))
-                    sw.WriteLine(latestVersion);
-
-                return latestVersion;
-            }
-            else
-            {
-                return File.ReadAllText(LatestVersionFilePath).Trim();
+                case TimeUnit.Seconds:
+                    return lastWriteTime.AddSeconds(UpdateInterval);
+                case TimeUnit.Minutes:
+                    return lastWriteTime.AddMinutes(UpdateInterval);
+                case TimeUnit.Hours:
+                    return lastWriteTime.AddHours(UpdateInterval);
+                case TimeUnit.Days:
+                    return lastWriteTime.AddDays(UpdateInterval);
+                case TimeUnit.Weeks:
+                    return lastWriteTime.AddDays(UpdateInterval * 7);
+                case TimeUnit.Months:
+                    return lastWriteTime.AddMonths(UpdateInterval);
+                case TimeUnit.Years:
+                    return lastWriteTime.AddYears(UpdateInterval);
+                default:
+                    return DateTime.MaxValue;
             }
         }
 
-        private string GetLastVersionFromApi()
+        private string GetRemoteVersion()
+        {
+            var latestVersion = GetLatestVersionFromApi();
+            StoreLatestVersion(latestVersion);
+            return latestVersion;
+        }
+
+        private string GetLatestVersionFromApi()
         {
             using (var httpClient = new HttpClient())
             {
@@ -95,10 +133,15 @@
             }
         }
 
-        private string GetMatchingValue(string json, string pattern)
+        private void StoreLatestVersion(string version) 
         {
-            var match = Regex.Match(json, pattern);
-            return match.Value;
+            using (var sw = File.CreateText(LatestVersionFilePath))
+                sw.WriteLine(version);
+        }
+
+        private string GetLocalVersion() 
+        {
+            return File.ReadAllText(LatestVersionFilePath).Trim();
         }
 
         private static bool CheckIfUpdateAvailable(string current, string latest)
@@ -115,13 +158,13 @@
     </Task>
   </UsingTask>
 
-  <Target Name="SonetaSdkCheckForUpdates" AfterTargets="Build" Condition="Exists($(GlobalJsonFilePath))">
+  <Target Name="SonetaSdkCheckForUpdates" AfterTargets="Build" Condition="Exists($(GlobalJsonFilePath)) AND $(SonetaSdkUpdateIntervalTime) != 'None'">
     <CheckForSdkUpdates
       GlobalJsonFilePath="$(GlobalJsonFilePath)"
       LatestVersionFilePath="$(SonetaSdkLatestVersionFilePath)"
       NugetApiUrl="$(SonetaSdkNugetApiUrl)"
-      SdkName="Soneta.Sdk"
-      UpdateInterval="$(SonetaSdkUpdateInterval)">
+      UpdateIntervalUnit="$(SonetaSdkUpdateIntervalTime)"
+      UpdateInterval="$(SonetaSdkUpdateIntervalValue)">
       <Output TaskParameter="IsUpdateAvailable" PropertyName="IsSonetaSdkUpdateAvailable" />
       <Output TaskParameter="CurrentVersion" PropertyName="SonetaSdkCurrentVersion" />
       <Output TaskParameter="LatestVersion" PropertyName="SonetaSdkLatestVersion" />
