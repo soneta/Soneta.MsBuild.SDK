@@ -12,7 +12,7 @@
     <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
     <SonetaSdkNugetApiUrl>https://api.nuget.org/v3-flatcontainer/soneta.sdk/index.json</SonetaSdkNugetApiUrl>
     <SonetaSdkUpdateIntervalValue Condition="'$(SonetaSdkUpdateIntervalValue)' == ''">1</SonetaSdkUpdateIntervalValue>
-    <SonetaSdkUpdateIntervalTime Condition="'$(SonetaSdkUpdateIntervalTime)' == ''">Minutes</SonetaSdkUpdateIntervalTime>
+    <SonetaSdkUpdateIntervalTime Condition="'$(SonetaSdkUpdateIntervalTime)' == ''">None</SonetaSdkUpdateIntervalTime>
   </PropertyGroup>
 
   <Import Project="common.items.props" />
