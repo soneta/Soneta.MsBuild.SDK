@@ -7,6 +7,14 @@
     <BaseOutputPath>$(AggregatePath)bin\</BaseOutputPath>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GlobalJsonFilePath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), global.json))\global.json</GlobalJsonFilePath>
+    <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
+    <SonetaSdkNugetApiUrl>https://api.nuget.org/v3-flatcontainer/soneta.sdk/index.json</SonetaSdkNugetApiUrl>
+    <SonetaSdkUpdateIntervalValue Condition="'$(SonetaSdkUpdateIntervalValue)' == ''">1</SonetaSdkUpdateIntervalValue>
+    <SonetaSdkUpdateIntervalTime Condition="'$(SonetaSdkUpdateIntervalTime)' == ''">None</SonetaSdkUpdateIntervalTime>
+  </PropertyGroup>
+
   <Import Project="common.items.props" />
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition=" '$(CommonTargetsPath)' == '' " />
 
@@ -17,6 +25,152 @@
     <RunCommand>$(StartProgram)</RunCommand>
     <RunArguments>$(StartArguments)</RunArguments>
   </PropertyGroup>
+
+  <UsingTask TaskName="CheckForSdkUpdates" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildBinPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <GlobalJsonFilePath ParameterType="System.String" Required="true" />
+      <LatestVersionFilePath ParameterType="System.String" Required="true" />
+      <NugetApiUrl ParameterType="System.String" Required="true" />
+      <UpdateInterval ParameterType="System.Int32" Required="true" />
+      <UpdateIntervalUnit ParameterType="System.String" Required="true" />
+      <IsUpdateAvailable ParameterType="System.Boolean" Output="true" />
+      <CurrentVersion ParameterType="System.String" Output="true" />
+      <LatestVersion ParameterType="System.String" Output="true" />
+    </ParameterGroup>
+
+    <Task>
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Net.Http" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Method" Language="cs">
+        <![CDATA[
+        public enum TimeUnit
+        {
+            None,
+            Seconds,
+            Minutes,
+            Hours,
+            Days,
+            Weeks,
+            Months,
+            Years
+        }
+
+        private const string GlobalJsonSdkVersionPattern = @"(?<=""Soneta.Sdk""\s*:\s*"")([0-9]+\.?){3,}(?=.*?"")";
+        private const string NugetApiLatestVersionPattern = @"(?<="")([0-9]+\.?){3,}(?=.*?""\s*])";
+
+        public override bool Execute()
+        {
+            CurrentVersion = GetCurrentVersion();
+            LatestVersion = GetLatestVersion();
+            IsUpdateAvailable = CheckIfUpdateAvailable(CurrentVersion, LatestVersion);
+
+            return true;
+        }
+
+        private string GetCurrentVersion()
+        {
+            if (File.Exists(GlobalJsonFilePath))
+            {
+                var json = File.ReadAllText(GlobalJsonFilePath);
+                return GetMatchingValue(json, GlobalJsonSdkVersionPattern);
+            }
+
+            return null;
+        }
+
+        private string GetMatchingValue(string json, string pattern)
+        {
+            var match = Regex.Match(json, pattern);
+            return match.Value;
+        }
+
+        private string GetLatestVersion()
+        {
+            return CalculateUpdateCheckTime() < DateTime.Now ? 
+                GetRemoteVersion() : GetLocalVersion();
+        }
+
+        private DateTime CalculateUpdateCheckTime() 
+        {
+            var lastWriteTime = File.GetLastWriteTime(LatestVersionFilePath);
+            Enum.TryParse(UpdateIntervalUnit, out TimeUnit unit);
+
+            switch (unit)
+            {
+                case TimeUnit.Seconds:
+                    return lastWriteTime.AddSeconds(UpdateInterval);
+                case TimeUnit.Minutes:
+                    return lastWriteTime.AddMinutes(UpdateInterval);
+                case TimeUnit.Hours:
+                    return lastWriteTime.AddHours(UpdateInterval);
+                case TimeUnit.Days:
+                    return lastWriteTime.AddDays(UpdateInterval);
+                case TimeUnit.Weeks:
+                    return lastWriteTime.AddDays(UpdateInterval * 7);
+                case TimeUnit.Months:
+                    return lastWriteTime.AddMonths(UpdateInterval);
+                case TimeUnit.Years:
+                    return lastWriteTime.AddYears(UpdateInterval);
+                default:
+                    return DateTime.MaxValue;
+            }
+        }
+
+        private string GetRemoteVersion()
+        {
+            var latestVersion = GetLatestVersionFromApi();
+            StoreLatestVersion(latestVersion);
+            return latestVersion;
+        }
+
+        private string GetLatestVersionFromApi()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var json = httpClient.GetStringAsync(NugetApiUrl).Result;
+                return GetMatchingValue(json, NugetApiLatestVersionPattern);
+            }
+        }
+
+        private void StoreLatestVersion(string version) 
+        {
+            using (var sw = File.CreateText(LatestVersionFilePath))
+                sw.WriteLine(version);
+        }
+
+        private string GetLocalVersion() 
+        {
+            return File.ReadAllText(LatestVersionFilePath).Trim();
+        }
+
+        private static bool CheckIfUpdateAvailable(string current, string latest)
+        {
+            if (string.IsNullOrEmpty(current) || string.IsNullOrEmpty(latest))
+                return false;
+
+            var currentVersion = new Version(current);
+            var latestVersion = new Version(latest);
+            return currentVersion.CompareTo(latestVersion) is -1;
+        }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="SonetaSdkCheckForUpdates" AfterTargets="Build" Condition="Exists($(GlobalJsonFilePath)) AND $(SonetaSdkUpdateIntervalTime) != 'None'">
+    <CheckForSdkUpdates
+      GlobalJsonFilePath="$(GlobalJsonFilePath)"
+      LatestVersionFilePath="$(SonetaSdkLatestVersionFilePath)"
+      NugetApiUrl="$(SonetaSdkNugetApiUrl)"
+      UpdateIntervalUnit="$(SonetaSdkUpdateIntervalTime)"
+      UpdateInterval="$(SonetaSdkUpdateIntervalValue)">
+      <Output TaskParameter="IsUpdateAvailable" PropertyName="IsSonetaSdkUpdateAvailable" />
+      <Output TaskParameter="CurrentVersion" PropertyName="SonetaSdkCurrentVersion" />
+      <Output TaskParameter="LatestVersion" PropertyName="SonetaSdkLatestVersion" />
+    </CheckForSdkUpdates>
+    <Warning Condition="$(IsSonetaSdkUpdateAvailable)" Text="Aktualnie używana wersja 'Soneta.Sdk' to: '$(SonetaSdkCurrentVersion)', istnieje nowsza wersja: '$(SonetaSdkLatestVersion)'. Aby ją ustawić, w pliku 'global.json' należy zamienić aktualny numer wesji 'Soneta.Sdk' na nowy." />
+  </Target>
 
   <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolveAssemblyReferences">
     <ItemGroup>
@@ -38,7 +192,7 @@
     <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
 
     <PropertyGroup>
-        <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
+      <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
     </PropertyGroup>
 
     <ItemGroup>
