@@ -29,6 +29,8 @@
     <EmbeddedResource Include="**\*.*form.rt.xml" />
     <None Remove="**\*.*form.mobile.xml" />
     <EmbeddedResource Include="**\*.*form.mobile.xml" />
+    <None Remove="**\*.rightstree.xml" />
+    <EmbeddedResource Include="**\*.rightstree.xml" />
     <None Remove="**\Repx\*.jpg" />
     <EmbeddedResource Include="**\Repx\*.jpg" />
     <None Remove="**\Repx\*.gif" />
