@@ -73,6 +73,7 @@ Możemy także wykorzystać takie parametry jak:<br>
   <li><b>SonetaAddonStartProgram</b> - ścieżka do programu, wraz z którym powinien być uruchamiany dodatek. Domyślna wartość dla tego parametru jest wyliczana w oparciu o ścieżkę, w której domyślnie instalowane jest oprogramowanie firmy Soneta (<b>C:\Program Files (x86)\Soneta\</b>). Spośród wszystkich zainstalowanych w takiej lokalizacji wersji programu, wybierana jest ostatnia. Jeśli program, z którym powinien być uruchamiany dodatek znajduje się w innej lokalizacji, należy ścieżkę do niego przypisać do tego parametru (np: 
 <b>C:\Program Files (x86)\Soneta\enova365 2002.0.0.17856\SonetaExplorer.exe</b>). Działanie parametru <b>SonetaAddonStartProgram</b> opiera się na automatycznym ustawieniu programu startowego i przekazaniu mu argumentu (parametr uruchomieniowy): 
 <b>/extpath=<ścieżka do binariów projektu></b>. W celu wyłączenia tego mechanizmu wystarczy jawnie ustawić <b>SonetaAddonStartProgram</b> na pustą wartość. Mechanizm ten nie nadpisze jawnie ustawionego parametru <b>StartProgram</b>, ani ustawień zapisanych w pliku <b>launchSettings.json</b>, w którym także można jawnie wskazać program startowy. Jeśli mechanizm oparty o <b>SonetaAddonStartProgram</b> nie działa poprawnie, należy w pierwszej kolejności sprawdzić, czy nie jest on nadpisywany przez wyżej wymienione ustawienia.</li>
+<li><b>AppendTargetFrameworkToOutputPath</b> Parametr przyjmuje wartości false lub true i steruje załączaniem podkatalogu z wersją biblioteki z którą dodatek został skompilowany </li>
 </ul>
 
 
@@ -106,6 +107,12 @@ Jeśli istnieje potrzeba referowania do większej ilości bibliotek, można poda
 ```
 
 Warto zwrócić uwagę, że jeśli zareferowane biblioteki, same w sobie referują do bibliotek Soneta dostarczanych przez Sdk, wersja bibliotek z obu źródeł powinna być zgodna. W przypadku podniesienia wersji **SonetaPackageVersion** w pliku **Directory.Build.props** pomimo różnicy wersji bibliotek DLL, nadal mogą one zachować zgodność. Może się jednak okazać, że w nowej paczce **SonetaPackage** zaszły znaczące zmiany uniemożliwiające dalsze współdziałanie bibliotek. W takim wypadku konieczne będzie zaktualizowanie referencji w dodatku do nowszej wersji bibliotek Soneta.
+# Testy
+Jeśli w dodatku dodajemy referencję do innego dodatku do enova365 i w testach chcemy użyć typów zdefiniownaych w referowanym dodatku to :
+<ul>
+<li>nasza klasa testowa musi dziedziczyć po klasie <b>TestBase</b></li> 
+<li>musimy dodać atrybut <b>[assembly: TestReference("AsemblyDoKtóregoReferujemy")</b></li> 
+</ul>
 
 # Współpraca
 W celu zaproponowania zmian należy stworzyć Pull Request do gałęzi develop. Po podjęciu decyzji o wydaniu nowej wersji branch develop zostanie zmergowany do mastera i dodatek zostanie automatycznie wydany. 
