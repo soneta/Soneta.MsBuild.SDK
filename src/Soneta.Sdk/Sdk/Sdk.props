@@ -10,7 +10,7 @@
     <IsTestProject Condition="$(IsTestProject) == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
     <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
     <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
-    <SonetaValueTuplePackageVersion>4.4.0</SonetaValueTuplePackageVersion>
+    <SonetaValueTuplePackageVersion>4.5.0</SonetaValueTuplePackageVersion>
     <SonetaNUnitPackageVersion>3.11.0</SonetaNUnitPackageVersion>
     <SonetaNUnitTestAdapterPackageVersion>3.13.0</SonetaNUnitTestAdapterPackageVersion>
     <SonetaNSubstitutePackageVersion>4.2.1</SonetaNSubstitutePackageVersion>
