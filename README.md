@@ -1,3 +1,5 @@
+# Wersja SDK 1.1.0 będzie kompatibilna z wersją enova365 2106.0.0 - została opublikowana do przeprowadzenia testów weryfikacyjnych
+
 # Soneta.MsBuild.SDK
 
 [![NuGet](https://img.shields.io/nuget/v/Soneta.Sdk.svg)](https://www.nuget.org/packages/Soneta.Sdk)
