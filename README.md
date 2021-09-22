@@ -1,4 +1,9 @@
-# Wersja SDK 1.1.0 będzie kompatibilna z wersją enova365 2106.0.0 - została opublikowana do przeprowadzenia testów weryfikacyjnych
+# Wersja SDK 1.1.0 jest do wykorzystania od wersji enova365 2106.0.0
+**!!! Korzystanie z tej wersji SDK wymaga usunięcia z plików modul.business.xml i modul.config.xml wpisu (jeżeli występuje):**
+
+`<import>generator<import>`
+
+Pozostawienie wpisu spowoduje konflikt dwóch sposobów pobierania generatora - nowego, automatycznego z SDK oraz starego - kopiowania generatora do folderu projektu, co zaskutkuje wygenerowaniem pustych plików.cs przez generator.
 
 # Soneta.MsBuild.SDK
 
