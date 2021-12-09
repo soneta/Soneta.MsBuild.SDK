@@ -1,3 +1,10 @@
+# Wersja SDK 1.1.0 jest do wykorzystania od wersji enova365 2106.0.0
+**!!! Korzystanie z tej wersji SDK wymaga usunięcia z plików modul.business.xml i modul.config.xml wpisu (jeżeli występuje):**
+
+`<import>generator<import>`
+
+Pozostawienie wpisu spowoduje konflikt dwóch sposobów pobierania generatora - nowego, automatycznego z SDK oraz starego - kopiowania generatora do folderu projektu, co zaskutkuje wygenerowaniem pustych plików.cs przez generator.
+
 # Soneta.MsBuild.SDK
 
 [![NuGet](https://img.shields.io/nuget/v/Soneta.Sdk.svg)](https://www.nuget.org/packages/Soneta.Sdk)
@@ -10,7 +17,7 @@ SDK (Software Development Kit) jest to zestaw narzędzi dla programistów niezb�
   <li><b>Common.item.props</b> -plik zapewnia automatyczną obsługę dołączania nowych plików do projektu. Między innymi pliki *.pageform.xml, *dbinit.xml zostaną automatycznie skonfigurowane jako EmbeddResource.</li>
 
   <li><b>Sdk.props</b> -plik zapewnia poprawne utworzenie referencji dla różnych typów projektów np. Dla projektu testowego zostaną załadowane biblioteki testowe.</li>
-  <li><b>Skd.targets</b> -plik przechowuje informacje dotyczące procesu budowanie m.in. automatycznego uruchamiania generatora tworzenia definicji baz danych (*.business.cs). Podsumowując prostymi słowami, od teraz nie będzie trzeba się zastanawiać, którą wersję generatora powinniśmy podpiąć, ponieważ zostanie to wykonane automatycznie.</li>
+  <li><b>Sdk.targets</b> -plik przechowuje informacje dotyczące procesu budowanie m.in. automatycznego uruchamiania generatora tworzenia definicji baz danych (*.business.cs). Podsumowując prostymi słowami, od teraz nie będzie trzeba się zastanawiać, którą wersję generatora powinniśmy podpiąć, ponieważ zostanie to wykonane automatycznie.</li>
 </ul>
 
 # Pierwsze kroki
