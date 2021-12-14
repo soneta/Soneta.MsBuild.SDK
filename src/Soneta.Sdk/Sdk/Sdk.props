@@ -11,8 +11,9 @@
     <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
     <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
     <SonetaValueTuplePackageVersion>4.5.0</SonetaValueTuplePackageVersion>
-    <SonetaNUnitPackageVersion>3.11.0</SonetaNUnitPackageVersion>
-    <SonetaNUnitTestAdapterPackageVersion>3.13.0</SonetaNUnitTestAdapterPackageVersion>
+    <SonetaNUnitPackageVersion>3.13.3</SonetaNUnitPackageVersion>
+    <SonetaNUnitTestAdapterPackageVersion>4.2.1</SonetaNUnitTestAdapterPackageVersion>
+    <SonetaMicrosoftNETTestSdkPackageVersion>17.2.0</SonetaMicrosoftNETTestSdkPackageVersion>
     <SonetaNSubstitutePackageVersion>4.2.1</SonetaNSubstitutePackageVersion>
     <SonetaFluentAssertionsPackageVersion>5.9.0</SonetaFluentAssertionsPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
@@ -27,12 +28,14 @@
   <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' == 'true'">
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Soneta.Products.Test" Version="$(SonetaPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' != 'true'" Include="Soneta.Products.Modules" Version="$(SonetaPackageVersion)" IncludeAssets="compile" />
     <PackageReference Condition="'$(IsTestProject)' != 'true'" Include="System.ValueTuple" Version="$(SonetaValueTuplePackageVersion)" IncludeAssets="compile" />
   </ItemGroup>
   <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' != 'true'">
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit" Version="$(SonetaNUnitPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NSubstitute" Version="$(SonetaNSubstitutePackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="FluentAssertions" Version="$(SonetaFluentAssertionsPackageVersion)" />
     <PackageReference Include="System.ValueTuple" Version="$(SonetaValueTuplePackageVersion)" />
