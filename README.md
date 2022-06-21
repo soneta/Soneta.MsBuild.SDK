@@ -1,3 +1,5 @@
+# Wersja SDK 1.1.2 jest kompatybilna z poprzednimi wersjami bibliotek FrameworkSoneta, a także do wykorzystania do kompilacji w netstandard2.0 od wersji enova365 2204.3.6
+
 # Wersja SDK 1.1.0 jest do wykorzystania od wersji enova365 2106.0.0
 **!!! Korzystanie z tej wersji SDK wymaga usunięcia z plików modul.business.xml i modul.config.xml wpisu (jeżeli występuje):**
 
