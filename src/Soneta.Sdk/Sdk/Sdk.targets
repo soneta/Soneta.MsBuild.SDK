@@ -174,8 +174,9 @@
 
   <Target Name="ResolveSonetaSchemaReferences" DependsOnTargets="ResolvePackageAssets">
     <ItemGroup>
-      <SonetaSchemaReference Include="$([System.IO.Path]::GetDirectoryName( '%(ResolvedCompileFileDefinitions.HintPath)' ))\..\..\schema\*.business.xml"
+      <SonetaSchemaReferencePossibleDuplicates Include="$([System.IO.Path]::GetDirectoryName( '%(ResolvedCompileFileDefinitions.HintPath)' ))\..\..\schema\*.business.xml"
         Condition="$( [System.String]::new( '%( ResolvedCompileFileDefinitions.HintPath )' ).Trim().Length ) &gt; 0" />
+      <SonetaSchemaReference Include="@(SonetaSchemaReferencePossibleDuplicates->Distinct())" />
     </ItemGroup>
     <Message Text="SonetaSchemaReference: %(SonetaSchemaReference.Identity)" />
   </Target>
