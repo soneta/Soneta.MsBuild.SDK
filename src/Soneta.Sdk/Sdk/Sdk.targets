@@ -219,7 +219,11 @@
           Inputs="@(WorkingXmls)" 
           Outputs="%(RelativeDir)%(Filename).cs">
 
-    <Exec Command="&quot;@(SonetaGeneratorExe)&quot; -s @(SonetaSchemaReference->'&quot;%(FullPath)&quot;',' ') @(WorkingBusXmls->'&quot;%(FullPath)&quot;',' ') &quot;%(WorkingXmls.FullPath)&quot;" />
+    <ItemGroup>
+      <WorkingBusXmlsExclCurr Include="@(WorkingBusXmls)" Exclude="@(WorkingXmls)" />
+    </ItemGroup>
+
+    <Exec Command="&quot;@(SonetaGeneratorExe)&quot; -s @(SonetaSchemaReference->'&quot;%(FullPath)&quot;',' ') @(WorkingBusXmlsExclCurr->'&quot;%(FullPath)&quot;',' ') &quot;%(WorkingXmls.FullPath)&quot;" />
     
     <ItemGroup>
       <Compile Remove="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs" />
