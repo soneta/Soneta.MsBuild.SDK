@@ -190,7 +190,7 @@
   </Target>
 
   <Target Name="PrepareSonetaGeneratorAssets" DependsOnTargets="ResolveSonetaSchemaReferences;ResolveSonetaGeneratorExe">
-    <Error Text="Soneta.Generator.exe is missing." Condition=" '@(SonetaGeneratorExe)' == '' " />
+    <Error Text="Soneta.Generator tool/task is missing." Condition=" '@(SonetaGeneratorExe)' == '' AND '$(SonetaGeneratorTaskAssembly)' == '' " />
 
     <PropertyGroup>
       <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
@@ -218,8 +218,14 @@
           Inputs="@(WorkingXmls)" 
           Outputs="%(RelativeDir)%(Filename).cs">
 
-    <Exec Command="&quot;@(SonetaGeneratorExe)&quot; -s @(SonetaSchemaReference->'&quot;%(FullPath)&quot;',' ') &quot;%(WorkingXmls.FullPath)&quot;" />
-    
+    <Exec 
+      Condition=" '@(SonetaGeneratorExe)' != '' "
+      Command="&quot;@(SonetaGeneratorExe)&quot; -s @(SonetaSchemaReference->'&quot;%(FullPath)&quot;',' ') &quot;%(WorkingXmls.FullPath)&quot;" />
+
+    <SonetaGenerator Condition=" '$(SonetaGeneratorTaskAssembly)' != '' " 
+      File="%(WorkingXmls.FullPath)"
+      SchemaReference="@(SonetaSchemaReference)" />
+      
     <ItemGroup>
       <Compile Remove="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs" />
       <Compile Include="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs">
