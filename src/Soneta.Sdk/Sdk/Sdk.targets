@@ -6,7 +6,7 @@
     <AggregatePath Condition="$(AggregatePath) == ''">..\</AggregatePath>
     <BaseOutputPath>$(AggregatePath)bin\</BaseOutputPath>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <GlobalJsonFilePath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), global.json))\global.json</GlobalJsonFilePath>
     <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
