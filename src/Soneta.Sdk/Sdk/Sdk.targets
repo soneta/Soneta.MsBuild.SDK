@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <PropertyGroup Condition="'$(IsTestProject)' != 'true' AND '$(AggregateOutput)' == 'true'">
     <AggregatePath Condition="$(AggregatePath) == ''">..\</AggregatePath>
-    
     <BaseOutputPath>$(AggregatePath)bin\</BaseOutputPath>
   </PropertyGroup>
+  
   <PropertyGroup>
     <GlobalJsonFilePath>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), global.json))\global.json</GlobalJsonFilePath>
     <SonetaSdkLatestVersionFilePath>$(NuGetPackageRoot)soneta.sdk\latest_version.txt</SonetaSdkLatestVersionFilePath>
@@ -235,4 +236,5 @@
       </Compile>
     </ItemGroup>
   </Target>
+
 </Project>
