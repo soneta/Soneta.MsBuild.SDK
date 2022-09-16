@@ -19,6 +19,7 @@
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
   <PropertyGroup Condition="'$(IsTestProject)' == 'true' AND '$(SonetaTargetFramework)' == 'netstandard2.0' ">
     <SonetaTargetFramework>net6</SonetaTargetFramework>
   </PropertyGroup>
