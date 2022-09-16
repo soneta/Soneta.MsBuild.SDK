@@ -19,7 +19,13 @@
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' AND '$(SonetaTargetFramework)' == 'netstandard2.0' ">
+    <SonetaTargetFramework>net6</SonetaTargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' AND '$(SonetaTestTargetFramework)' != ''">
+    <SonetaTargetFramework>$(SonetaTestTargetFramework)</SonetaTargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''"> 
     <SonetaDefaultInstallDirectory>$(MSBuildProgramFiles32)\Soneta</SonetaDefaultInstallDirectory>
     <SonetaCurrentVersionIndex Condition="Exists($(SonetaDefaultInstallDirectory))">$([MSBuild]::Add($([System.IO.Directory]::GetDirectories($(SonetaDefaultInstallDirectory)).Length), -1))</SonetaCurrentVersionIndex>
     <SonetaCurrentVersionDirectory Condition="$(SonetaCurrentVersionIndex) != '' AND $(SonetaCurrentVersionIndex) &gt; -1">$([System.IO.Directory]::GetDirectories($(SonetaDefaultInstallDirectory))[$(SonetaCurrentVersionIndex)])</SonetaCurrentVersionDirectory>
