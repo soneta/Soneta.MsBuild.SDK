@@ -10,11 +10,11 @@
     <IsTestProject Condition="$(IsTestProject) == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
     <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
     <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
-    <SonetaValueTuplePackageVersion>4.5.0</SonetaValueTuplePackageVersion>
-    <SonetaNUnitPackageVersion>3.13.3</SonetaNUnitPackageVersion>
-    <SonetaNUnitTestAdapterPackageVersion>4.2.1</SonetaNUnitTestAdapterPackageVersion>
-    <SonetaMicrosoftNETTestSdkPackageVersion>17.2.0</SonetaMicrosoftNETTestSdkPackageVersion>
-    <SonetaNSubstitutePackageVersion>4.2.1</SonetaNSubstitutePackageVersion>
+    <SonetaValueTuplePackageVersion Condition="'$(SonetaValueTuplePackageVersion)' == ''">4.5.0</SonetaValueTuplePackageVersion>
+    <SonetaNUnitPackageVersion Condition="'$(SonetaNUnitPackageVersion)' == ''">3.13.3</SonetaNUnitPackageVersion>
+    <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">4.3.0</SonetaNUnitTestAdapterPackageVersion>
+    <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">17.4.0</SonetaMicrosoftNETTestSdkPackageVersion>
+    <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">4.4.0</SonetaNSubstitutePackageVersion>
     <SonetaFluentAssertionsPackageVersion Condition="'$(SonetaFluentAssertionsPackageVersion)' == ''">6.8.0</SonetaFluentAssertionsPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
