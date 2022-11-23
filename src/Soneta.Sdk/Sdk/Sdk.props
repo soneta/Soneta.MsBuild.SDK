@@ -26,6 +26,7 @@
     <SonetaAddonStartProgram>$(SonetaCurrentVersionDirectory)\SonetaExplorer.exe</SonetaAddonStartProgram>
   </PropertyGroup>
   <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' == 'true'">
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit" Version="$(SonetaNUnitPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Soneta.Products.Test" Version="$(SonetaPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" />
