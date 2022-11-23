@@ -66,7 +66,7 @@ Kolejnym ważnym elementem znajdującym się w pliku „Directory.Build.props je
 # Informacje Ogólne
 Soneta.sdk obsługuje **3 typy projektów**, które można stworzyć. W zależności od rodzaju projektu pobierane są inne biblioteki. Możemy stworzyć takie projekty jak:<br>
 <ul>
-   <li>Projekt testowy, który w swojej nazwie będzie zawierał słowo "**Tests**"</li>
+   <li>Projekt testowy, który w swojej nazwie będzie zawierał słowo "**Test**"</li>
    <li>Projekt interfejsu użytkownika kończacy się na wyrażeniu "***.UI**"</li>
    <li>Projekt dodatku zawierający elementy logiki biznesowej</li>
 </ul>
