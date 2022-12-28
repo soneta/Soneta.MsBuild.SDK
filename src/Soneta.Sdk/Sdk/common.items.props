@@ -43,10 +43,10 @@
     <EmbeddedResource Include="**\Repx\*.png" />
     <None Remove="**\Repx\*.bmp" />
     <EmbeddedResource Include="**\Repx\*.bmp" />
+    <None Remove="**\*.repx" />
+    <EmbeddedResource Include="**\*.repx" />
 
-    <Compile Update="**\*.repx.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Update="**\*.repx.cs"/>
     <EmbeddedResource Include="**\*.repx.cs" />
 
     <Compile Update="**\*.snippet.cs">
