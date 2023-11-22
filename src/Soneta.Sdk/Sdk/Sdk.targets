@@ -21,7 +21,7 @@
   <PropertyGroup Condition="'$(IsTestProject)' != 'true' AND $(StartProgram) == '' AND Exists($(SonetaAddonStartProgram))">
     <StartAction>Program</StartAction>
     <StartProgram>$(SonetaAddonStartProgram)</StartProgram>
-    <StartArguments>/extpath="$(MSBuildProjectDirectory)\$(OutputPath)\"</StartArguments>
+    <StartArguments>--extpath=$(MSBuildProjectDirectory)\$(OutputPath)\</StartArguments>
     <RunCommand>$(StartProgram)</RunCommand>
     <RunArguments>$(StartArguments)</RunArguments>
   </PropertyGroup>
