@@ -42,6 +42,8 @@
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="**\*.repx.cs" />
+    
+    <EmbeddedResource Include="**\*.dotx" />
 
     <None Remove="**\*.role.xml" />
     <EmbeddedResource Include="**\*.role.xml" />
