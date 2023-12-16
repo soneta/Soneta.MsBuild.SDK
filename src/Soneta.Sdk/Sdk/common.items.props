@@ -42,6 +42,10 @@
       <SubType>Component</SubType>
     </Compile>
     <EmbeddedResource Include="**\*.repx.cs" />
+    <Compile Update="**\*.snippet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="**\*.snippet.cs" />
     
     <EmbeddedResource Include="**\*.dotx" />
 
