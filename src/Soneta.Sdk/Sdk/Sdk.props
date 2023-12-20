@@ -16,7 +16,6 @@
     <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">17.8.0</SonetaMicrosoftNETTestSdkPackageVersion>
     <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">5.1.0</SonetaNSubstitutePackageVersion>
     <SonetaFluentAssertionsPackageVersion Condition="'$(SonetaFluentAssertionsPackageVersion)' == ''">6.12.0</SonetaFluentAssertionsPackageVersion>
-    <SonetaMoqPackageVersion Condition="'$(SonetaMoqPackageVersion)' == ''">4.20.70</SonetaMoqPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
