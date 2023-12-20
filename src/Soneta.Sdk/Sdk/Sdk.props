@@ -11,7 +11,7 @@
     <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
     <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
     <SonetaValueTuplePackageVersion Condition="'$(SonetaValueTuplePackageVersion)' == ''">4.5.0</SonetaValueTuplePackageVersion>
-    <SonetaNUnitPackageVersion Condition="'$(SonetaNUnitPackageVersion)' == ''">4.0.1</SonetaNUnitPackageVersion>
+    <SonetaNUnitPackageVersion Condition="'$(SonetaNUnitPackageVersion)' == ''">3.14.0</SonetaNUnitPackageVersion>
     <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">4.5.0</SonetaNUnitTestAdapterPackageVersion>
     <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">17.8.0</SonetaMicrosoftNETTestSdkPackageVersion>
     <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">5.1.0</SonetaNSubstitutePackageVersion>
