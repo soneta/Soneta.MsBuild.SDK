@@ -23,12 +23,12 @@
 
     <None Remove="**\*.*form.xml" />
     <EmbeddedResource Include="**\*.*form.xml" />
-    <None Remove="**\*.*form.exp.xml" />
-    <EmbeddedResource Include="**\*.*form.exp.xml" />
-    <None Remove="**\*.*form.rt.xml" />
-    <EmbeddedResource Include="**\*.*form.rt.xml" />
     <None Remove="**\*.*form.mobile.xml" />
     <EmbeddedResource Include="**\*.*form.mobile.xml" />
+    <None Remove="**\*.*form.console.xml" />
+    <EmbeddedResource Include="**\*.*form.console.xml" />
+    <None Remove="**\*.*form.browsernew.xml" />
+    <EmbeddedResource Include="**\*.*form.browsernew.xml" />
     <None Remove="**\*.rightstree.xml" />
     <EmbeddedResource Include="**\*.rightstree.xml" />
     <None Remove="**\*.*form.premium.xml" />
