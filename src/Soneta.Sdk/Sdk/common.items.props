@@ -2,20 +2,8 @@
 
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Update="**\*.business.xml" Pack="true" PackagePath="schema\%(Filename)%(Extension)" >
-      <SubType>Designer</SubType>
-    </None>
-    <None Remove="**\*.config.xml" />
-    <EmbeddedResource Include="**\*.config.xml" Pack="false" >
-      <LastGenOutput>%(Filename).cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Update="**\*.business.cs;**\*.config.cs">
-      <DependentUpon>%(Filename).xml</DependentUpon>
-      <SubType>Code</SubType>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <AdditionalFiles Include="**\*.business.xml" />
+    <AdditionalFiles Include="**\*.config.xml" />
     <None Remove="**\*.convert.sql" />
     <EmbeddedResource Include="**\*.convert.sql" />
     <None Remove="**\*.dbinit.xml" />
