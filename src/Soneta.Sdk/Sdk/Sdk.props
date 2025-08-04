@@ -15,7 +15,7 @@
     <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">5.0.0</SonetaNUnitTestAdapterPackageVersion>
     <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">17.13.0</SonetaMicrosoftNETTestSdkPackageVersion>
     <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">5.3.0</SonetaNSubstitutePackageVersion>
-    <SonetaFluentAssertionsPackageVersion Condition="'$(SonetaFluentAssertionsPackageVersion)' == ''">7.2.0</SonetaFluentAssertionsPackageVersion>
+    <SonetaAwesomeAssertionsPackageVersion Condition="'$(SonetaAwesomeAssertionsPackageVersion)' == ''">7.2.0</SonetaAwesomeAssertionsPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
@@ -38,7 +38,7 @@
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NSubstitute" Version="$(SonetaNSubstitutePackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="FluentAssertions" Version="$(SonetaFluentAssertionsPackageVersion)" />
+    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="AwesomeAssertions" Version="$(SonetaAwesomeAssertionsPackageVersion)" />
     <PackageReference Include="System.ValueTuple" Version="$(SonetaValueTuplePackageVersion)" />
   </ItemGroup>
 </Project>
