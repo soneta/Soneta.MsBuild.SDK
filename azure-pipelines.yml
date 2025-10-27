@@ -1,8 +1,10 @@
 resources:
 - repo: self
-pool:
-  vmImage: 'windows-2019'
+pool: # WindowsDefault
+  vmImage: 'windows-2022'
 steps:
+- script: copy README.md src\
+  displayName: Copy README.md for NuGet pack
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
