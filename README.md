@@ -1,3 +1,9 @@
+### Wersja SDK 1.1.7 jest wymagana od wersji enova265 2510.0.0 w przypadku wykorzystania warstwy testów integracyjnych. Nastąpiła zmiana wykorzystywanej bliblioteki do wykonywania assercji.
+
+### Wersja SDK 1.1.6 - aktualizacja zależności
+
+### Wersja SDK 1.1.5 - dodatnie obsługi wzorców DOCX
+
 ### Wersja SDK 1.1.4 jest wymagana od wersji enova265 2306.0.0-net (NET 6)
 
 ### Wersja SDK 1.1.2 jest kompatybilna z poprzednimi wersjami bibliotek FrameworkSoneta, a także do wykorzystania do kompilacji w netstandard2.0 od wersji enova365 2204.3.6
