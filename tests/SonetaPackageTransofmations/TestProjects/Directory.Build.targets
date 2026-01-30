@@ -1,0 +1,9 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildSDKsPath)/Microsoft.NET.Sdk/Sdk/Sdk.targets" />
+  <Target Name="DumpPackageReferences">
+    <ItemGroup>
+      <_PackageRef Include="@(PackageReference->'%(Identity)')" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(PackageDumpPath)" Lines="@(_PackageRef)" Overwrite="true" />
+  </Target>
+</Project>

@@ -1,0 +1,7 @@
+<Project Sdk="Soneta.Sdk">
+  <Import Project="Directory.Build.targets" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <UsingMicrosoftNETSdk>true</UsingMicrosoftNETSdk>
+  </PropertyGroup>
+</Project>
