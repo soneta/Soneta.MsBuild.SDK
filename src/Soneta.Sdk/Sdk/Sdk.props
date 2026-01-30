@@ -10,35 +10,70 @@
     <IsTestProject Condition="$(IsTestProject) == '' AND $(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
     <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
     <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
-    <SonetaValueTuplePackageVersion Condition="'$(SonetaValueTuplePackageVersion)' == ''">4.5.0</SonetaValueTuplePackageVersion>
-    <SonetaNUnitPackageVersion Condition="'$(SonetaNUnitPackageVersion)' == ''">4.3.2</SonetaNUnitPackageVersion>
-    <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">5.0.0</SonetaNUnitTestAdapterPackageVersion>
-    <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">17.13.0</SonetaMicrosoftNETTestSdkPackageVersion>
+    <SonetaNUnitPackageVersion Condition="'$(SonetaNUnitPackageVersion)' == ''">4.4.0</SonetaNUnitPackageVersion>
+    <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">6.1.0</SonetaNUnitTestAdapterPackageVersion>
+    <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">18.0.1</SonetaMicrosoftNETTestSdkPackageVersion>
     <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">5.3.0</SonetaNSubstitutePackageVersion>
-    <SonetaAwesomeAssertionsPackageVersion Condition="'$(SonetaAwesomeAssertionsPackageVersion)' == ''">9.1.0</SonetaAwesomeAssertionsPackageVersion>
+    <SonetaNSubstituteAnalyzersCSharpPackageVersion Condition="'$(SonetaNSubstituteAnalyzersCSharpPackageVersion)' == ''">1.0.17</SonetaNSubstituteAnalyzersCSharpPackageVersion>
+    <SonetaAwesomeAssertionsPackageVersion Condition="'$(SonetaAwesomeAssertionsPackageVersion)' == ''">9.3.0</SonetaAwesomeAssertionsPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
+    <SonetaPackageReferenceNeedsVersion Condition="'$(ManagePackageVersionsCentrally)' != 'true'">true</SonetaPackageReferenceNeedsVersion>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
     <SonetaDefaultInstallDirectory>$(MSBuildProgramFiles32)\Soneta</SonetaDefaultInstallDirectory>
     <SonetaCurrentVersionIndex Condition="Exists($(SonetaDefaultInstallDirectory))">$([MSBuild]::Add($([System.IO.Directory]::GetDirectories($(SonetaDefaultInstallDirectory)).Length), -1))</SonetaCurrentVersionIndex>
     <SonetaCurrentVersionDirectory Condition="$(SonetaCurrentVersionIndex) != '' AND $(SonetaCurrentVersionIndex) &gt; -1">$([System.IO.Directory]::GetDirectories($(SonetaDefaultInstallDirectory))[$(SonetaCurrentVersionIndex)])</SonetaCurrentVersionDirectory>
     <SonetaAddonStartProgram>$(SonetaCurrentVersionDirectory)\SonetaExplorer.exe</SonetaAddonStartProgram>
   </PropertyGroup>
-  <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' == 'true'">
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit" Version="$(SonetaNUnitPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Soneta.Products.Test" Version="$(SonetaPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' != 'true'" Include="Soneta.Products.Modules" Version="$(SonetaPackageVersion)" IncludeAssets="compile;buildTransitive" />
-    <PackageReference Condition="'$(IsTestProject)' != 'true'" Include="System.ValueTuple" Version="$(SonetaValueTuplePackageVersion)" IncludeAssets="compile" />
+
+  <!--
+    Macierz mapowania SonetaPackage -> PackageReference
+
+    Legenda kolumn:
+      T+ A+ = IsTestProject=true,  IsAddonProject=true
+      T+ A- = IsTestProject=true,  IsAddonProject!=true
+      T- A+ = IsTestProject!=true, IsAddonProject=true
+      T- A- = IsTestProject!=true, IsAddonProject!=true
+
+    +=====================================+=======+=======+=======+=======+
+    | SonetaPackage                       | T+ A+ | T+ A- | T- A+ | T- A- |
+    +=====================================+=======+=======+=======+=======+
+    | NUnit                               |  YES  |  YES  |  NO   |  NO   |
+    | Soneta.Products.Test                |  YES  |  NO   |  NO   |  NO   |
+    | NUnit3TestAdapter                   |  YES  |  YES  |  NO   |  NO   |
+    | Microsoft.NET.Test.Sdk              |  YES  |  YES  |  NO   |  NO   |
+    | NSubstitute                         |  NO   |  YES  |  NO   |  NO   |
+    | NSubstitute.Analyzers.CSharp        |  NO   |  YES  |  NO   |  NO   |
+    | AwesomeAssertions                   |  NO   |  YES  |  NO   |  NO   |
+    | Soneta.Products.Modules             |  NO   |  NO   |  YES  |  NO   |
+    +=====================================+=======+=======+=======+=======+
+  -->
+  <ItemGroup>
+    <SonetaPackage Include="NUnit" Version="$(SonetaNUnitPackageVersion)" IsTestProject="true" />
+    <SonetaPackage Include="Soneta.Products.Test" Version="$(SonetaPackageVersion)" IsTestProject="true" IsAddonProject="true" />
+    <SonetaPackage Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" IsTestProject="true" />
+    <SonetaPackage Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" IsTestProject="true" />
+    <SonetaPackage Include="NSubstitute" Version="$(SonetaNSubstitutePackageVersion)" IsTestProject="true" IsAddonProject="false" />
+    <SonetaPackage Include="NSubstitute.Analyzers.CSharp" Version="$(SonetaNSubstituteAnalyzersCSharpPackageVersion)" IsTestProject="true" IsAddonProject="false" />
+    <SonetaPackage Include="AwesomeAssertions" Version="$(SonetaAwesomeAssertionsPackageVersion)" IsTestProject="true" IsAddonProject="false" />
+    <SonetaPackage Include="Soneta.Products.Modules" Version="$(SonetaPackageVersion)" IsAddonProject="true" IncludeAssets="compile;buildTransitive" />
   </ItemGroup>
-  <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' != 'true'">
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit" Version="$(SonetaNUnitPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NUnit3TestAdapter" Version="$(SonetaNUnitTestAdapterPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="Microsoft.NET.Test.Sdk" Version="$(SonetaMicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="NSubstitute" Version="$(SonetaNSubstitutePackageVersion)" />
-    <PackageReference Condition="'$(IsTestProject)' == 'true'" Include="AwesomeAssertions" Version="$(SonetaAwesomeAssertionsPackageVersion)" />
-    <PackageReference Include="System.ValueTuple" Version="$(SonetaValueTuplePackageVersion)" />
+  <!-- PackageReference: IsTestProject=true, IsAddonProject dowolny -->
+  <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsTestProject)' == 'true'">
+    <PackageReference Include="@(SonetaPackage->WithMetadataValue('IsTestProject','true')->WithMetadataValue('IsAddonProject',''))"
+      IsImplicitlyDefined="true" />
+    <PackageReference Include="@(SonetaPackage->WithMetadataValue('IsTestProject','true')->WithMetadataValue('IsAddonProject','true'))"
+      Condition="'$(IsAddonProject)' == 'true'"
+      IsImplicitlyDefined="true" />
+    <PackageReference Include="@(SonetaPackage->WithMetadataValue('IsTestProject','true')->WithMetadataValue('IsAddonProject','false'))"
+      Condition="'$(IsAddonProject)' != 'true'"
+      IsImplicitlyDefined="true" />
+  </ItemGroup>
+  <!-- PackageReference: IsTestProject='', IsAddonProject=true (np. Soneta.Products.Modules) -->
+  <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsAddonProject)' == 'true'">
+    <PackageReference Include="@(SonetaPackage->WithMetadataValue('IsTestProject','')->WithMetadataValue('IsAddonProject','true'))"
+      IsImplicitlyDefined="true" />
   </ItemGroup>
 </Project>
