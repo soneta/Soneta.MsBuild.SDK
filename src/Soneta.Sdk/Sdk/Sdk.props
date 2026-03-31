@@ -16,6 +16,10 @@
     <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">5.3.0</SonetaNSubstitutePackageVersion>
     <SonetaNSubstituteAnalyzersCSharpPackageVersion Condition="'$(SonetaNSubstituteAnalyzersCSharpPackageVersion)' == ''">1.0.17</SonetaNSubstituteAnalyzersCSharpPackageVersion>
     <SonetaAwesomeAssertionsPackageVersion Condition="'$(SonetaAwesomeAssertionsPackageVersion)' == ''">9.3.0</SonetaAwesomeAssertionsPackageVersion>
+    <SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion>
+    <SonetaMicrosoftTestingExtensionsHangDumpPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsHangDumpPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsHangDumpPackageVersion>
+    <SonetaMicrosoftTestingExtensionsRetryPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsRetryPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsRetryPackageVersion>
+    <SonetaMicrosoftTestingExtensionsTrxReportPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsTrxReportPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsTrxReportPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
     <SonetaPackageReferenceNeedsVersion Condition="'$(ManagePackageVersionsCentrally)' != 'true'">true</SonetaPackageReferenceNeedsVersion>
@@ -48,6 +52,10 @@
     | NSubstitute.Analyzers.CSharp        |  NO   |  YES  |  NO   |  NO   |
     | AwesomeAssertions                   |  NO   |  YES  |  NO   |  NO   |
     | Soneta.Products.Modules             |  NO   |  NO   |  YES  |  NO   |
+    | Microsoft.Testing.Extensions.CrashDump |  YES  |  YES  |  NO   |  NO   |
+    | Microsoft.Testing.Extensions.HangDump  |  YES  |  YES  |  NO   |  NO   |
+    | Microsoft.Testing.Extensions.Retry     |  YES  |  YES  |  NO   |  NO   |
+    | Microsoft.Testing.Extensions.TrxReport |  YES  |  YES  |  NO   |  NO   |
     +=====================================+=======+=======+=======+=======+
   -->
   <ItemGroup>
@@ -59,7 +67,16 @@
     <SonetaPackage Include="NSubstitute.Analyzers.CSharp" Version="$(SonetaNSubstituteAnalyzersCSharpPackageVersion)" IsTestProject="true" IsAddonProject="false" />
     <SonetaPackage Include="AwesomeAssertions" Version="$(SonetaAwesomeAssertionsPackageVersion)" IsTestProject="true" IsAddonProject="false" />
     <SonetaPackage Include="Soneta.Products.Modules" Version="$(SonetaPackageVersion)" IsAddonProject="true" IncludeAssets="compile;buildTransitive" />
+    <SonetaPackage Include="Microsoft.Testing.Extensions.CrashDump" Version="$(SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion)" IsTestProject="true" />
+    <SonetaPackage Include="Microsoft.Testing.Extensions.HangDump" Version="$(SonetaMicrosoftTestingExtensionsHangDumpPackageVersion)" IsTestProject="true" />
+    <SonetaPackage Include="Microsoft.Testing.Extensions.Retry" Version="$(SonetaMicrosoftTestingExtensionsRetryPackageVersion)" IsTestProject="true" />
+    <SonetaPackage Include="Microsoft.Testing.Extensions.TrxReport" Version="$(SonetaMicrosoftTestingExtensionsTrxReportPackageVersion)" IsTestProject="true" />
   </ItemGroup>
+
+  <!-- MTP NUnit runner enable -->
+  <PropertyGroup Condition="'$(UsingMicrosoftNETSdk)' == 'true' AND '$(IsTestProject)' == 'true'">
+    <EnableNUnitRunner Condition="'$(EnableNUnitRunner)' == ''">true</EnableNUnitRunner>
+  </PropertyGroup>
   <!-- PackageReference: IsTestProject=true, IsAddonProject dowolny -->
   <ItemGroup Condition="'$(EnableDefaultSonetaPackageReferences)' == 'true' AND '$(IsTestProject)' == 'true'">
     <PackageReference Include="@(SonetaPackage->WithMetadataValue('IsTestProject','true')->WithMetadataValue('IsAddonProject',''))"
