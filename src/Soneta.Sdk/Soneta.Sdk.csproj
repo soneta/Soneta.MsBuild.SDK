@@ -17,10 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="../README.md" Pack="true" PackagePath="\"/>
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <Content Include="Sdk\**">
       <Pack>true</Pack>
       <PackagePath>Sdk</PackagePath>
