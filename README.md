@@ -5,9 +5,10 @@
 [![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-MSBuild SDK do budowania dodatków dla **enova365**. Zdejmuje z projektu dodatku ręczną
-konfigurację: sam dobiera referencje do bibliotek Soneta, sam uruchamia generator kodu
-i sam rozpoznaje pliki zasobów charakterystyczne dla platformy.
+MSBuild SDK do budowania dodatków dla enova365 — automatyczne referencje, generator kodu i zasoby platformy.
+
+Zdejmuje z projektu dodatku ręczną konfigurację: sam dobiera referencje do bibliotek Soneta,
+sam uruchamia generator kodu i sam rozpoznaje pliki zasobów charakterystyczne dla platformy.
 
 > 📖 **Historia zmian:** [CHANGELOG.md](CHANGELOG.md) · **Proces wydania:** [RELEASING.md](RELEASING.md)
 
