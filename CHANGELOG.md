@@ -14,7 +14,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 > pomiędzy kolejnymi commitami wydaniowymi. Szczegóły metody i znane niepewności opisano
 > w sekcji [Uwagi do rekonstrukcji](#uwagi-do-rekonstrukcji) na końcu pliku.
 
-## [Nieopublikowane]
+## [Niewydane]
 
 ### Zmienione
 
@@ -27,7 +27,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
   nieaktualny i wymagał ręcznego `clean`. Wspólny stempel projektu powoduje też, że zmiana
   `business.xml` regeneruje również `config.cs`. ([#99])
 
-## [1.2.0] – 2026-07-01
+## [1.2.0] - 2026-07-01
 
 > **Wymagana od enova365 2606.0.0 (NET 10).** Zmiana zależności i platformy testowej na zgodne
 > z .NET 10.
@@ -54,7 +54,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - Referencja do `System.ValueTuple` oraz parametr `SonetaValueTuplePackageVersion` — zbędne na .NET 10.
 
-## [1.1.8] – 2026-06-05
+## [1.1.8] - 2026-06-05
 
 ### Zmienione
 
@@ -63,7 +63,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 - `README.md` dołączany do paczki jako opis pakietu na nuget.org (`PackageReadmeFile`).
 - Pula agentów builda w Azure Pipelines ustawiona na `windows-2022`.
 
-## [1.1.7] – 2025-10-27
+## [1.1.7] - 2025-10-27
 
 > **Wymagana od enova365 2510.0.0** w przypadku korzystania z warstwy testów integracyjnych —
 > zmieniła się biblioteka do wykonywania asercji.
@@ -74,7 +74,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
   Parametr `SonetaFluentAssertionsPackageVersion` zastąpiony przez
   `SonetaAwesomeAssertionsPackageVersion`.
 
-## [1.1.6] – 2025-06-20
+## [1.1.6] - 2025-06-20
 
 ### Dodane
 
@@ -86,7 +86,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
   NUnit3TestAdapter `4.5.0` → `5.0.0`, Microsoft.NET.Test.Sdk `17.8.0` → `17.13.0`,
   NSubstitute `5.1.0` → `5.3.0`, FluentAssertions `6.12.0` → `7.2.0`.
 
-## [1.1.5] – 2024-01-02
+## [1.1.5] - 2024-01-02
 
 ### Dodane
 
@@ -102,7 +102,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - Referencja do `Moq` wraz z parametrem wersji.
 
-## [1.1.4] – 2022-11-25
+## [1.1.4] - 2022-11-25
 
 > **Wymagana od enova365 2306.0.0-net (.NET 6).**
 
@@ -110,7 +110,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - Podniesienie wersji `FluentAssertions`.
 
-## [1.1.3] – 2022-09-26
+## [1.1.3] - 2022-09-26
 
 ### Dodane
 
@@ -121,7 +121,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - `CopyLocalLockFileAssemblies` ustawiane wyłącznie dla projektów dodatków.
 
-## [1.1.2] – 2022-06-22
+## [1.1.2] - 2022-06-22
 
 > Kompatybilna z poprzednimi wersjami bibliotek FrameworkSoneta; nadaje się do kompilacji
 > w `netstandard2.0` od wersji enova365 2204.3.6.
@@ -134,13 +134,13 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - `CopyLocalLockFileAssemblies` ustawione na `true`.
 
-## [1.1.1] – 2021-12-09
+## [1.1.1] - 2021-12-09
 
 ### Naprawione
 
 - Poprawka błędu zgłoszonego w [#49] dotyczącego `Sdk.targets`. ([#52])
 
-## [1.1.0] – 2021-03-24
+## [1.1.0] - 2021-03-24
 
 > **Zmiana łamiąca kompatybilność.** Korzystanie z tej wersji wymaga **usunięcia** z plików
 > `modul.business.xml` i `modul.config.xml` wpisu `<import>generator</import>`, jeżeli występuje.
@@ -155,7 +155,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 - Ścieżka przekazywana przez `extPath` ujęta w cudzysłów. ([#45])
 - Aktualizacja `Nerdbank.GitVersioning` do `3.3.37`.
 
-## [1.0.4] – 2020-04-06
+## [1.0.4] - 2020-04-06
 
 ### Dodane
 
@@ -167,7 +167,11 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - Sparametryzowanie wersji `NSubstitute` i `FluentAssertions`. ([#34])
 
-## [1.0.3] – 2019-10-28
+## [1.0.3] - 2019-10-28
+
+### Dodane
+
+- Dokument `RELEASING.md` opisujący proces wydania. ([#23])
 
 ### Zmienione
 
@@ -179,15 +183,12 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 - Uzupełnienie brakującego `Condition` przy elemencie `Import`. ([#30])
 
-### Dokumentacja
-
-- Dodanie `RELEASING.md` opisującego proces wydania. ([#23])
-
-## [1.0.2] – 2019-09-20
+## [1.0.2] - 2019-09-20
 
 ### Dodane
 
 - Obsługa **wielu plików `business.xml`** w jednym projekcie. ([#15])
+- Dokument `VERSIONING.md` z instrukcją wersjonowania podczas wydania.
 
 ### Naprawione
 
@@ -195,11 +196,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 - Generator nie tworzył plików `config.cs` na podstawie `config.xml`. ([#16])
 - Wygenerowane pliki `*.business.cs` nie wchodzą już w skład paczki NuGet. ([#12])
 
-### Dokumentacja
-
-- Instrukcja wersjonowania podczas wydania (`VERSIONING.md`).
-
-## [1.0.1] – 2019-06-26
+## [1.0.1] - 2019-06-26
 
 ### Naprawione
 
@@ -213,7 +210,7 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 - Zniesienie grupowania w repozytorium plików `*.business.xml` / `*.config.xml`
   z odpowiadającymi im `*.cs`.
 
-## [1.0.0] – 2019-05-21
+## [1.0.0] - 2019-05-21
 
 Pierwsze publiczne wydanie SDK.
 
@@ -256,7 +253,7 @@ Historia wersji do 1.2.0 włącznie została odtworzona po fakcie. Warto znać j
   je jednoznacznie odczytać z komunikatów commitów. Odwołania do wewnętrznych identyfikatorów
   Azure DevOps (np. `Task #146366`) zostały pominięte jako niedostępne publicznie.
 
-[Nieopublikowane]: https://github.com/soneta/Soneta.MsBuild.SDK/compare/master...develop
+[Niewydane]: https://github.com/soneta/Soneta.MsBuild.SDK/compare/master...develop
 [1.2.0]: https://www.nuget.org/packages/Soneta.Sdk/1.2.0
 [1.1.8]: https://www.nuget.org/packages/Soneta.Sdk/1.1.8
 [1.1.7]: https://www.nuget.org/packages/Soneta.Sdk/1.1.7

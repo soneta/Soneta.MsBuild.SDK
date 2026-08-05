@@ -336,7 +336,7 @@ mogą nadal współdziałać mimo różnicy wersji, ale przy większych zmianach
 Zmiany zgłaszamy przez Pull Request do gałęzi `develop`. Po decyzji o wydaniu `develop`
 jest scalany do `master`, co uruchamia publikację nowej wersji.
 
-Każdy PR zmieniający zachowanie SDK powinien dopisać wpis do sekcji **Nieopublikowane**
+Każdy PR zmieniający zachowanie SDK powinien dopisać wpis do sekcji **Niewydane**
 w [CHANGELOG.md](CHANGELOG.md).
 
 ### Testowanie zmian lokalnie
