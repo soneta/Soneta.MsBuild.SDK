@@ -30,7 +30,7 @@ SDK dostarcza trzy pliki, które MSBuild wciąga do projektu dodatku automatyczn
 |---|---|
 | `Sdk.props` | Referencje do pakietów NuGet dobierane pod typ projektu (dodatek / UI / testy) oraz wartości domyślne parametrów. |
 | `Sdk.targets` | Przebieg budowania — przede wszystkim uruchomienie generatora zamieniającego pliki `*.business.xml` i `*.config.xml` na kod `*.cs`. Wersja generatora dobierana jest automatycznie do wersji bibliotek. |
-| `common.items.props` | Rozpoznawanie plików specyficznych dla platformy (`*.form.xml`, `*.dbinit.xml`, `*.repx` i inne) i oznaczanie ich jako `EmbeddedResource`. |
+| `common.items.props` | Rozpoznawanie plików specyficznych dla platformy (`*.*form.xml`, `*.dbinit.xml`, `*.repx` i inne) i oznaczanie ich jako `EmbeddedResource`. |
 
 W praktyce znika pytanie „którą wersję generatora podpiąć" — wynika ona z wersji bibliotek
 zadeklarowanej w jednym miejscu.
@@ -41,7 +41,7 @@ Wersję SDK dobiera się do wersji enova365, z którą budowany jest dodatek.
 
 | Wersja SDK | Wymagana od enova365 | Platforma | Uwagi |
 |---|---|---|---|
-| **1.2.0** | 2606.0.0 | .NET 10 | Przejście na Microsoft.Testing.Platform. Wsparcie Central Package Management. |
+| **1.2.0** | 2606.0.0 | .NET 10 | Przejście na Microsoft.Testing.Platform. |
 | 1.1.8 | — | .NET 10 | Pierwsze dostosowanie do .NET 10. |
 | 1.1.7 | 2510.0.0 | .NET 6+ | Wymagana przy korzystaniu z testów integracyjnych — zmiana biblioteki asercji na `AwesomeAssertions`. |
 | 1.1.6 | — | .NET 6+ | Aktualizacja zależności testowych (NUnit 4). |
