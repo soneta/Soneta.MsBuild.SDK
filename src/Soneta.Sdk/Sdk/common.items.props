@@ -7,15 +7,8 @@
     </None>
     <None Remove="**\*.config.xml" />
     <EmbeddedResource Include="**\*.config.xml" Pack="false" >
-      <LastGenOutput>%(Filename).cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Update="**\*.business.cs;**\*.config.cs">
-      <DependentUpon>%(Filename).xml</DependentUpon>
-      <SubType>Code</SubType>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Remove="**\*.convert.sql" />
     <EmbeddedResource Include="**\*.convert.sql" />
     <None Remove="**\*.dbinit.xml" />

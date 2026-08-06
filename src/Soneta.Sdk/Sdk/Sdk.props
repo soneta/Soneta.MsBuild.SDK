@@ -23,7 +23,26 @@
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
     <SonetaPackageReferenceNeedsVersion Condition="'$(ManagePackageVersionsCentrally)' != 'true'">true</SonetaPackageReferenceNeedsVersion>
+
+    <!--
+      Generator Soneta = source generator Roslyn (business.xml/config.xml -> C# przez AddSource,
+      bez pisania *.cs na dysk). Jedyna sciezka generacji w tym SDK. Zysk: zywy IntelliSense
+      na typach z business.xml + szybszy build (parytet 1:1 z dawnym generatorem).
+
+      Wymog wydania: paczka $(SonetaSourceGeneratorPackage) opublikowana, a
+      $(SonetaSourceGeneratorPackageVersion) ustawiona (guard w Sdk.targets).
+    -->
+    <SonetaSourceGeneratorPackage Condition="'$(SonetaSourceGeneratorPackage)' == ''">Soneta.Generator.Roslyn</SonetaSourceGeneratorPackage>
+    <SonetaSourceGeneratorPackageVersion Condition="'$(SonetaSourceGeneratorPackageVersion)' == ''">15.0.0</SonetaSourceGeneratorPackageVersion>
   </PropertyGroup>
+
+  <!-- Generator ladowany jako ANALYZER przez kompilator (analyzers/dotnet/cs). -->
+  <ItemGroup Condition="'$(SonetaSourceGeneratorPackageVersion)' != ''">
+    <PackageReference Include="$(SonetaSourceGeneratorPackage)"
+                      Version="$(SonetaSourceGeneratorPackageVersion)"
+                      PrivateAssets="all"
+                      IsImplicitlyDefined="true" />
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(IsAddonProject)' == 'true' AND '$(IsTestProject)' != 'true' AND $(SonetaAddonStartProgram) == ''">
     <SonetaDefaultInstallDirectory>$(MSBuildProgramFiles32)\Soneta</SonetaDefaultInstallDirectory>

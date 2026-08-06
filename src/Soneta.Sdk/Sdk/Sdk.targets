@@ -181,92 +181,55 @@
     <Message Text="SonetaSchemaReference: %(SonetaSchemaReference.Identity)" />
   </Target>
 
-  <Target Name="ResolveSonetaGeneratorExe" DependsOnTargets="ResolvePackageAssets">
-    <ItemGroup>
-      <SonetaGeneratorExe Include="%(ResolvedCompileFileDefinitions.HintPath)"
-        Condition="$( [System.String]::new( '%( ResolvedCompileFileDefinitions.HintPath )' ).Contains( 'Soneta.Generator.exe' ) )" />
-    </ItemGroup>
-    <Message Text="SonetaGeneratorExe: @(SonetaGeneratorExe)" />
-  </Target>
-
-  <Target Name="PrepareSonetaGeneratorAssets" DependsOnTargets="ResolveSonetaSchemaReferences;ResolveSonetaGeneratorExe">
-    <Error Text="Soneta.Generator tool/task is missing." Condition=" '@(SonetaGeneratorExe)' == '' AND '$(SonetaGeneratorTaskAssembly)' == '' " />
-
+  <Target Name="PrepareSonetaGeneratorAssets" DependsOnTargets="ResolveSonetaSchemaReferences">
     <PropertyGroup>
       <MetadataToRemove>Pack;PackagePath;SubType</MetadataToRemove>
     </PropertyGroup>
 
     <ItemGroup>
-      <WorkingXmls 
-        Include="@(None)" 
+      <WorkingXmls
+        Include="@(None)"
         Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml', StringComparison.InvariantCultureIgnoreCase ))"
         RemoveMetadata="$(MetadataToRemove)" />
-      <WorkingXmls 
-        Include="@(EmbeddedResource)" 
+      <WorkingXmls
+        Include="@(EmbeddedResource)"
         Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase ))"
         RemoveMetadata="$(MetadataToRemove)" />
     </ItemGroup>
   </Target>
 
-  <PropertyGroup>
-    <SonetaGeneratorStampFile>$(IntermediateOutputPath)soneta.generator.stamp</SonetaGeneratorStampFile>
-  </PropertyGroup>
-
   <!--
-    Wykrywanie zmian dla generatora oparte na TRESCI wejsc, a nie na czasach modyfikacji plikow.
-    Wejsciem generowanego .cs sa dwa zrodla: wlasny *.business.xml/*.config.xml oraz *.business.xml
-    modulow nadrzednych (@(SonetaSchemaReference)), z ktorych generator czyta definicje typow.
-    Liczymy SHA256 z tresci obu zrodel i zapisujemy do stempla w obj TYLKO gdy hash sie zmienil.
-    ExecuteSonetaGenerator patrzy na stempel, wiec regeneruje po zmianie tresci wejsc albo gdy
-    brakuje oczekiwanego pliku wynikowego.
-    Rozwiazuje to dwa problemy klasycznego Inputs="@(WorkingXmls)":
-      1. git przy 'checkout' ustawia czas modyfikacji plikow na "teraz" niezaleznie od zawartosci
-         -> wczesniej wymuszalo to zbedne przegenerowania,
-      2. zmiana wylacznie schematu nadrzednego nie zmieniala wlasnego xml -> wczesniej regeneracja
-         byla pomijana i .cs pozostawal nieaktualny (stad "clean").
-    Wspolny dla projektu stempel powoduje tez, ze zmiana business.xml regeneruje rowniez config.cs (#48).
+    Generacja przez source generator Roslyn: XML-e ida jako AdditionalFiles z metadana
+    SonetaInputKind; generator (analyzer z analyzers/dotnet/cs) emituje kod przez AddSource.
+    Zadnego pisania *.cs na dysk, zadnego Exec/Task.
+
+    Inkrementalnosc obsluguje sam Roslyn (IIncrementalGenerator porownuje tresc AdditionalFiles),
+    wiec stempel SHA256 z #99 (ComputeSonetaGeneratorStamp) nie jest juz potrzebny - sluzyl
+    wylacznie do sterowania Inputs/Outputs znikajacego targetu ExecuteSonetaGenerator.
+
+    Zakres (SchemaReference) pochodzi z ResolveSonetaSchemaReferences (schema z paczek).
   -->
-  <Target Name="ComputeSonetaGeneratorStamp" DependsOnTargets="PrepareSonetaGeneratorAssets">
-    <GetFileHash Files="@(WorkingXmls);@(SonetaSchemaReference)" Algorithm="SHA256">
-      <Output TaskParameter="Items" ItemName="_SonetaHashedInputs" />
-    </GetFileHash>
-    <Hash ItemsToHash="@(_SonetaHashedInputs->'%(FileHash)')">
-      <Output TaskParameter="HashResult" PropertyName="_SonetaInputsHash" />
-    </Hash>
-    <ReadLinesFromFile File="$(SonetaGeneratorStampFile)" Condition="Exists('$(SonetaGeneratorStampFile)')">
-      <Output TaskParameter="Lines" PropertyName="_SonetaPrevHash" />
-    </ReadLinesFromFile>
-    <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
-    <WriteLinesToFile File="$(SonetaGeneratorStampFile)" Lines="$(_SonetaInputsHash)" Overwrite="true"
-      Condition="'$(_SonetaInputsHash)' != '$(_SonetaPrevHash)'" />
+  <Target Name="SonetaSourceGeneratorAssert" BeforeTargets="SonetaSourceGeneratorAdditionalFiles"
+          DependsOnTargets="PrepareSonetaGeneratorAssets"
+          Condition="'$(SonetaSourceGeneratorPackageVersion)' == '' AND '@(WorkingXmls)' != ''">
+    <Error Text="SonetaSourceGeneratorPackageVersion jest pusta, a projekt ma pliki business.xml/config.xml do wygenerowania. Ustaw wersje paczki generatora '$(SonetaSourceGeneratorPackage)'." />
   </Target>
 
-  <Target Name="ExecuteSonetaGenerator" BeforeTargets="BeforeCompile;CoreCompile" DependsOnTargets="ComputeSonetaGeneratorStamp"
-          Condition="( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' )
-            AND (
-              $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0
-                OR
-              $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.config.xml', SearchOption.AllDirectories ).Length ) &gt; 0
-            )"
-          Inputs="$(SonetaGeneratorStampFile)"
-          Outputs="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs">
-
-    <Exec 
-      Condition=" '@(SonetaGeneratorExe)' != '' "
-      Command="&quot;@(SonetaGeneratorExe)&quot; -s @(SonetaSchemaReference->'&quot;%(FullPath)&quot;',' ') &quot;%(WorkingXmls.FullPath)&quot;" />
-
-    <SonetaGenerator Condition=" '$(SonetaGeneratorTaskAssembly)' != '' " 
-      File="%(WorkingXmls.FullPath)"
-      SchemaReference="@(SonetaSchemaReference)" />
-      
+  <Target Name="SonetaSourceGeneratorAdditionalFiles"
+          BeforeTargets="BeforeCompile;CoreCompile"
+          DependsOnTargets="PrepareSonetaGeneratorAssets">
     <ItemGroup>
-      <Compile Remove="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs" />
-      <Compile Include="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs">
-        <DependentUpon>%(WorkingXmls.Filename).xml</DependentUpon>
-        <SubType>Code</SubType>
-        <AutoGen>True</AutoGen>
-        <DesignTime>True</DesignTime>
-      </Compile>
+      <AdditionalFiles Include="@(SonetaSchemaReference)">
+        <SonetaInputKind>SchemaReference</SonetaInputKind>
+      </AdditionalFiles>
+      <AdditionalFiles Include="@(WorkingXmls)"
+          Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('business.xml', StringComparison.InvariantCultureIgnoreCase))">
+        <SonetaInputKind>BusinessXml</SonetaInputKind>
+      </AdditionalFiles>
+      <AdditionalFiles Include="@(WorkingXmls)"
+          Condition="$([System.String]::new('%(Filename)%(Extension)').EndsWith('config.xml', StringComparison.InvariantCultureIgnoreCase))">
+        <SonetaInputKind>ConfigXml</SonetaInputKind>
+      </AdditionalFiles>
     </ItemGroup>
   </Target>
 
