@@ -11,15 +11,16 @@
     <EnableDefaultSonetaPackageReferences Condition="$(EnableDefaultSonetaPackageReferences) == ''">true</EnableDefaultSonetaPackageReferences>
     <AggregateOutput Condition="$(AggregateOutput) == ''">true</AggregateOutput>
     <SonetaNUnitPackageVersion Condition="'$(SonetaNUnitPackageVersion)' == ''">4.4.0</SonetaNUnitPackageVersion>
-    <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">6.1.0</SonetaNUnitTestAdapterPackageVersion>
+    <SonetaNUnitTestAdapterPackageVersion Condition="'$(SonetaNUnitTestAdapterPackageVersion)' == ''">6.3.0</SonetaNUnitTestAdapterPackageVersion>
     <SonetaMicrosoftNETTestSdkPackageVersion Condition="'$(SonetaMicrosoftNETTestSdkPackageVersion)' == ''">18.0.1</SonetaMicrosoftNETTestSdkPackageVersion>
     <SonetaNSubstitutePackageVersion Condition="'$(SonetaNSubstitutePackageVersion)' == ''">5.3.0</SonetaNSubstitutePackageVersion>
     <SonetaNSubstituteAnalyzersCSharpPackageVersion Condition="'$(SonetaNSubstituteAnalyzersCSharpPackageVersion)' == ''">1.0.17</SonetaNSubstituteAnalyzersCSharpPackageVersion>
     <SonetaAwesomeAssertionsPackageVersion Condition="'$(SonetaAwesomeAssertionsPackageVersion)' == ''">9.3.0</SonetaAwesomeAssertionsPackageVersion>
-    <SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion>
-    <SonetaMicrosoftTestingExtensionsHangDumpPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsHangDumpPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsHangDumpPackageVersion>
-    <SonetaMicrosoftTestingExtensionsRetryPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsRetryPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsRetryPackageVersion>
-    <SonetaMicrosoftTestingExtensionsTrxReportPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsTrxReportPackageVersion)' == ''">2.0.2</SonetaMicrosoftTestingExtensionsTrxReportPackageVersion>
+    <SonetaMicrosoftTestingExtensionsPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsPackageVersion)' == ''">2.3.3</SonetaMicrosoftTestingExtensionsPackageVersion>
+    <SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion)' == ''">$(SonetaMicrosoftTestingExtensionsPackageVersion)</SonetaMicrosoftTestingExtensionsCrashDumpPackageVersion>
+    <SonetaMicrosoftTestingExtensionsHangDumpPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsHangDumpPackageVersion)' == ''">$(SonetaMicrosoftTestingExtensionsPackageVersion)</SonetaMicrosoftTestingExtensionsHangDumpPackageVersion>
+    <SonetaMicrosoftTestingExtensionsRetryPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsRetryPackageVersion)' == ''">$(SonetaMicrosoftTestingExtensionsPackageVersion)</SonetaMicrosoftTestingExtensionsRetryPackageVersion>
+    <SonetaMicrosoftTestingExtensionsTrxReportPackageVersion Condition="'$(SonetaMicrosoftTestingExtensionsTrxReportPackageVersion)' == ''">$(SonetaMicrosoftTestingExtensionsPackageVersion)</SonetaMicrosoftTestingExtensionsTrxReportPackageVersion>
     <UsingSonetaSdk>true</UsingSonetaSdk>
     <CopyLocalLockFileAssemblies Condition=" '$(IsAddonProject)' == 'true' ">true</CopyLocalLockFileAssemblies>
     <SonetaPackageReferenceNeedsVersion Condition="'$(ManagePackageVersionsCentrally)' != 'true'">true</SonetaPackageReferenceNeedsVersion>
