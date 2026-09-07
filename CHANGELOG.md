@@ -166,6 +166,11 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 ### Zmienione
 
 - Sparametryzowanie wersji `NSubstitute` i `FluentAssertions`. ([#34])
+- Uniezależnienie uruchamiania `SonetaAddonStartProgram` od właściwości `Configuration`. ([#31])
+
+### Naprawione
+
+- Uzupełnienie brakującego `Condition` przy elemencie `Import`. ([#30])
 
 ## [1.0.3] - 2019-10-28
 
@@ -175,13 +180,8 @@ a nie dacie commita podnoszącego numer wersji — te potrafiły różnić się 
 
 ### Zmienione
 
-- Uniezależnienie uruchamiania `SonetaAddonStartProgram` od właściwości `Configuration`. ([#31])
 - Uniezależnienie działania `AggregateOutput` od `StartProgram`, `SonetaAddonStartProgram`
   i `Configuration`. ([#24])
-
-### Naprawione
-
-- Uzupełnienie brakującego `Condition` przy elemencie `Import`. ([#30])
 
 ## [1.0.2] - 2019-09-20
 
@@ -226,7 +226,7 @@ Pierwsze publiczne wydanie SDK.
   na `/extpath=<OutputPath>` dla projektów dodatków.
 - Referencja do `NUnitTestAdapter` dla projektów testowych oraz parametr
   `SonetaNUnitPackageVersion`.
-- Flaga `UsingSonetaSdk` pozwalająca wyłączyć SDK dla wybranego projektu.
+- Znacznik `UsingSonetaSdk` ustawiany na `true`, informujący o użyciu SDK w projekcie.
 - Licencja MIT.
 
 ## Uwagi do rekonstrukcji

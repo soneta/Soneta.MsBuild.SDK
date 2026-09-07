@@ -146,7 +146,7 @@ Kombinacja obu flag decyduje o zestawie pakietów:
 | NSubstitute | — | ✅ | — | — |
 | NSubstitute.Analyzers.CSharp | — | ✅ | — | — |
 | AwesomeAssertions | — | ✅ | — | — |
-| Soneta.Products.Modules | — | — | ✅ | — |
+| Soneta.Products.Modules | ✅ | — | ✅ | — |
 
 Kolumny odpowiadają kombinacjom `IsTestProject` / `IsAddonProject`. Źródłem tej tabeli jest
 macierz `SonetaPackage` w `Sdk.props`.
@@ -193,7 +193,16 @@ Pliki traktowane inaczej niż jako zwykły zasób osadzony:
 | `*.business.xml` | **Nie** jest zasobem osadzonym. Trafia do paczki NuGet dodatku pod ścieżkę `schema\`, dzięki czemu moduły zależne widzą schemat. |
 | `*.business.cs`, `*.config.cs` | Kompilowane, oznaczone jako wygenerowane i podpięte w drzewie projektu pod odpowiadający im plik XML. |
 | `*.repx.cs`, `*.snippet.cs` | Jednocześnie kompilowane i osadzane jako zasób. |
-| `*.dll`, `*.exe`, `*.traineddata` | Kopiowane do katalogu wynikowego w trybie `PreserveNewest`. |
+| `*.dll`, `*.exe`, `*.traineddata` | SDK ustawia `CopyToOutputDirectory=PreserveNewest` dla pasujących, istniejących elementów `Content`. Samo dodanie pliku do katalogu projektu nie włącza kopiowania — domyślnie jest on elementem `None`. |
+
+Aby kopiować plik będący elementem `None`, ustaw tę właściwość jawnie w `.csproj`, na przykład
+dla modelu OCR `pol.traineddata`:
+
+```xml
+<ItemGroup>
+  <None Update="pol.traineddata" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
+```
 
 Pliki `*.business.xml` i `*.config.xml` są wejściem dla generatora, który produkuje z nich
 odpowiadające im pliki `*.business.cs` i `*.config.cs`. Wygenerowany kod nie wchodzi w skład
@@ -208,22 +217,19 @@ paczki NuGet dodatku.
 | `EnableDefaultSonetaPackageReferences` | `true` | Gdy `false`, SDK nie dołącza automatycznie referencji do bibliotek biznesowych. |
 | `RunSonetaGenerator` | — (włączony) | Generator działa, dopóki parametr nie zostanie ustawiony na `false`. |
 | `IsTestProject` | wykrywane z nazwy projektu | Wymusza traktowanie projektu jako testowego. |
-| `UsingSonetaSdk` | `true` | Pozwala zdecydować, czy dany projekt korzysta z Soneta.MsBuild.SDK — patrz uwaga niżej. |
+| `UsingSonetaSdk` | `true` po imporcie SDK | Znacznik ustawiany przez SDK, a nie przełącznik jego włączania lub wyłączania — patrz uwaga niżej. |
 
-> **Jak działa `UsingSonetaSdk`.** SDK ustawia tę flagę na `true` w momencie, gdy zostanie
-> załadowane. Korzystają z niej pliki `Directory.Build.props` po stronie rozwiązania, żeby nie
-> zaimportować SDK po raz drugi w projekcie, który deklaruje je już przez
-> `<Project Sdk="Soneta.Sdk">`. Typowy warunek wygląda tak:
->
-> ```xml
-> <PropertyGroup>
->   <ImportSonetaSdk Condition="'$(UsingSonetaSdk)' != 'true' AND '$(UsingMicrosoftNETSdk)' == 'true'">true</ImportSonetaSdk>
-> </PropertyGroup>
-> <Import Project="Sdk.props" Sdk="Soneta.Sdk" Condition="'$(ImportSonetaSdk)' == 'true'" />
-> ```
->
-> Dzięki temu ustawienie `UsingSonetaSdk` na `true` w konkretnym projekcie wyłącza dla niego
-> automatyczny import SDK z `Directory.Build.props`.
+> **Kolejność importów a `UsingSonetaSdk`.** Soneta.Sdk ustawia tę flagę dopiero po imporcie
+> `Microsoft.NET.Sdk`, podczas którego odczytywany jest `Directory.Build.props`. W tym pliku
+> flaga może więc być jeszcze pusta, nawet jeśli projekt deklaruje `<Project Sdk="Soneta.Sdk">`.
+> Warunek oparty tylko na `UsingSonetaSdk` i `UsingMicrosoftNETSdk` nie chroni przed ponownym
+> importem Soneta.Sdk. Z kolei ustawienie flagi w treści `.csproj` następuje już po odczytaniu
+> `Directory.Build.props`, więc nie wyłącza wykonanego tam importu.
+
+W rozwiązaniu mieszanym najprościej wskazać SDK jawnie w każdym `.csproj`: `Soneta.Sdk` dla
+projektów korzystających z niego, a `Microsoft.NET.Sdk` dla pozostałych. W tym wariancie
+`Directory.Build.props` zawiera wspólne właściwości, bez dodatkowego importu Soneta.Sdk —
+tak jak w sekcji [Pierwsze kroki](#pierwsze-kroki).
 
 ### Lokalizacja wyników budowania
 
