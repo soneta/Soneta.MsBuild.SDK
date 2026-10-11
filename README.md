@@ -3,14 +3,14 @@
 [![NuGet](https://img.shields.io/nuget/v/Soneta.Sdk.svg)](https://www.nuget.org/packages/Soneta.Sdk)
 [![NuGet](https://img.shields.io/nuget/dt/Soneta.Sdk.svg)](https://www.nuget.org/packages/Soneta.Sdk)
 [![Build Status](https://soneta.visualstudio.com/GitHub/_apis/build/status/Soneta.MsBuild.SDK?branchName=master)](https://soneta.visualstudio.com/GitHub/_build/latest?definitionId=2&branchName=master)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/LICENSE)
 
 MSBuild SDK do budowania dodatków dla enova365 — automatyczne referencje, generator kodu i zasoby platformy.
 
 Zdejmuje z projektu dodatku ręczną konfigurację: sam dobiera referencje do bibliotek Soneta,
 sam uruchamia generator kodu i sam rozpoznaje pliki zasobów charakterystyczne dla platformy.
 
-> 📖 **Historia zmian:** [CHANGELOG.md](CHANGELOG.md) · **Proces wydania:** [RELEASING.md](RELEASING.md)
+> 📖 **Historia zmian:** [CHANGELOG.md](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/CHANGELOG.md) · **Proces wydania:** [RELEASING.md](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/RELEASING.md)
 
 ## Spis treści
 
@@ -57,7 +57,7 @@ Wersję SDK dobiera się do wersji enova365, z którą budowany jest dodatek.
 > opartego na kopiowaniu generatora do folderu projektu. Skutkiem są **puste pliki `.cs`**
 > wyprodukowane przez generator.
 
-Pełna lista zmian: [CHANGELOG.md](CHANGELOG.md).
+Pełna lista zmian: [CHANGELOG.md](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/CHANGELOG.md).
 
 ## Pierwsze kroki
 
@@ -344,7 +344,7 @@ Zmiany zgłaszamy przez Pull Request do gałęzi `develop`. Po decyzji o wydaniu
 jest scalany do `master`, co uruchamia publikację nowej wersji.
 
 Każdy PR zmieniający zachowanie SDK powinien dopisać wpis do sekcji **Niewydane**
-w [CHANGELOG.md](CHANGELOG.md).
+w [CHANGELOG.md](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/CHANGELOG.md).
 
 ### Testowanie zmian lokalnie
 
@@ -358,8 +358,8 @@ dotnet nuget push nazwaPaczki.nupkg -s C:\Users\<uzytkownik>\.nuget\packages
 
 ### Wydawanie nowych wersji
 
-Proces wydania opisuje [RELEASING.md](RELEASING.md).
+Proces wydania opisuje [RELEASING.md](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/RELEASING.md).
 
 ## Licencja
 
-[MIT](LICENSE)
+[MIT](https://github.com/soneta/Soneta.MsBuild.SDK/blob/812192755307973ca014692fd09ea20ce0eb47ea/LICENSE)
