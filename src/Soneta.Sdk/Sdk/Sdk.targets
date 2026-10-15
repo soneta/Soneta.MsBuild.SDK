@@ -208,15 +208,48 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="ExecuteSonetaGenerator" BeforeTargets="BeforeCompile;CoreCompile" DependsOnTargets="PrepareSonetaGeneratorAssets"
-          Condition="( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' ) 
+  <PropertyGroup>
+    <SonetaGeneratorStampFile>$(IntermediateOutputPath)soneta.generator.stamp</SonetaGeneratorStampFile>
+  </PropertyGroup>
+
+  <!--
+    Wykrywanie zmian dla generatora oparte na TRESCI wejsc, a nie na czasach modyfikacji plikow.
+    Wejsciem generowanego .cs sa dwa zrodla: wlasny *.business.xml/*.config.xml oraz *.business.xml
+    modulow nadrzednych (@(SonetaSchemaReference)), z ktorych generator czyta definicje typow.
+    Liczymy SHA256 z tresci obu zrodel i zapisujemy do stempla w obj TYLKO gdy hash sie zmienil.
+    ExecuteSonetaGenerator patrzy na stempel, wiec regeneruje po zmianie tresci wejsc albo gdy
+    brakuje oczekiwanego pliku wynikowego.
+    Rozwiazuje to dwa problemy klasycznego Inputs="@(WorkingXmls)":
+      1. git przy 'checkout' ustawia czas modyfikacji plikow na "teraz" niezaleznie od zawartosci
+         -> wczesniej wymuszalo to zbedne przegenerowania,
+      2. zmiana wylacznie schematu nadrzednego nie zmieniala wlasnego xml -> wczesniej regeneracja
+         byla pomijana i .cs pozostawal nieaktualny (stad "clean").
+    Wspolny dla projektu stempel powoduje tez, ze zmiana business.xml regeneruje rowniez config.cs (#48).
+  -->
+  <Target Name="ComputeSonetaGeneratorStamp" DependsOnTargets="PrepareSonetaGeneratorAssets">
+    <GetFileHash Files="@(WorkingXmls);@(SonetaSchemaReference)" Algorithm="SHA256">
+      <Output TaskParameter="Items" ItemName="_SonetaHashedInputs" />
+    </GetFileHash>
+    <Hash ItemsToHash="@(_SonetaHashedInputs->'%(FileHash)')">
+      <Output TaskParameter="HashResult" PropertyName="_SonetaInputsHash" />
+    </Hash>
+    <ReadLinesFromFile File="$(SonetaGeneratorStampFile)" Condition="Exists('$(SonetaGeneratorStampFile)')">
+      <Output TaskParameter="Lines" PropertyName="_SonetaPrevHash" />
+    </ReadLinesFromFile>
+    <MakeDir Directories="$(IntermediateOutputPath)" Condition="!Exists('$(IntermediateOutputPath)')" />
+    <WriteLinesToFile File="$(SonetaGeneratorStampFile)" Lines="$(_SonetaInputsHash)" Overwrite="true"
+      Condition="'$(_SonetaInputsHash)' != '$(_SonetaPrevHash)'" />
+  </Target>
+
+  <Target Name="ExecuteSonetaGenerator" BeforeTargets="BeforeCompile;CoreCompile" DependsOnTargets="ComputeSonetaGeneratorStamp"
+          Condition="( '$(RunSonetaGenerator)' == '' OR '$(RunSonetaGenerator)' != 'false' )
             AND (
               $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.business.xml', SearchOption.AllDirectories ).Length ) &gt; 0
-                OR 
+                OR
               $( [System.IO.Directory]::GetFiles( '$(ProjectDir)' , '*.config.xml', SearchOption.AllDirectories ).Length ) &gt; 0
             )"
-          Inputs="@(WorkingXmls)" 
-          Outputs="%(RelativeDir)%(Filename).cs">
+          Inputs="$(SonetaGeneratorStampFile)"
+          Outputs="%(WorkingXmls.RelativeDir)%(WorkingXmls.Filename).cs">
 
     <Exec 
       Condition=" '@(SonetaGeneratorExe)' != '' "
